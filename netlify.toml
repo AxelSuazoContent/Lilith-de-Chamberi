@@ -1,0 +1,28 @@
+# Configuración de Netlify para el sitio
+# Sube toda la carpeta del proyecto a Netlify → Deploy automático
+
+[build]
+  publish = "."
+
+# Headers de seguridad HTTP
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Cache-Control = "public, max-age=3600"
+
+# Cache largo para assets estáticos
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirigir 404 al index
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

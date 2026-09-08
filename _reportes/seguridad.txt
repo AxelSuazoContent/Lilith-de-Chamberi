@@ -1,0 +1,4 @@
+✅ Parches de seguridad aplicados:
+  • CSP (sitio estático), X-Frame-Options vía header HTTP real
+  • eval() bloqueado, http→https en imágenes
+  • rel="noopener noreferrer" en links externos

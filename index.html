@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src * data:; font-src https://fonts.gstatic.com; connect-src 'self' https://docs.google.com https://*.googleusercontent.com;">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lilith be Chamberi — Elegancia Oscura</title> <!-- #EDITAR — Título que aparece en la pestaña del navegador -->
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Pirata+One&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* #EDITAR — COLORES DE MARCA
+   Cambia estos valores hex para ajustar la paleta a tu marca.
+   --mag = color principal (botones, precios, acentos fuertes)
+   --fus = color secundario (etiquetas, textos destacados)
+   --rose = color de acento dorado (ofertas, detalles)
+   --papery / --cream = fondos suaves
+   --dark = color oscuro (footer, textos fuertes)
+*/
+:root{
+  --mag:#1a1a2e;--fus:#16213e;--rose:#e94560;--blush:#c8b8d0;
+  --papery:#f0eaf4;--cream:#faf7fc;--white:#fff;
+  --dark:#0a0a15;--muted:#7a6a8a;--border:#d8c8e8;
+  --font-heading:'UnifrakturCook',serif;--font-accent:'Cormorant Garamond',serif;--font-ui:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-ui);background:var(--cream);color:var(--dark);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
+
+/* ════════════════════════════════
+   ANNOUNCEMENT BAR
+════════════════════════════════ */
+.ann{background:var(--dark);color:var(--blush);text-align:center;padding:.5rem 1rem;font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;font-weight:400;flex-shrink:0;}
+
+/* ════════════════════════════════
+   NAV — logo centrado, editorial, en negro
+════════════════════════════════ */
+nav{background:var(--dark);border-bottom:1px solid rgba(233,69,96,.35);box-shadow:0 1px 0 var(--rose);position:sticky;top:0;z-index:300;flex-shrink:0;}
+.nav-top{display:flex;align-items:center;justify-content:center;gap:2.8rem;padding:1.35rem 2rem;flex-wrap:wrap;position:relative;}
+.logo{font-family:var(--font-heading);font-size:1.85rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:.6rem;letter-spacing:.03em;}
+.logo-icon{height:34px;width:34px;display:block;}
+.logo em{color:var(--rose);font-style:normal;}
+.nav-right{display:flex;align-items:center;gap:1rem;position:absolute;right:2rem;top:50%;transform:translateY(-50%);}
+.nav-links-desktop{display:flex;gap:0;list-style:none;}
+.nav-links-desktop li{position:relative;}
+.nav-links-desktop li:not(:last-child)::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:1px;height:11px;background:rgba(255,255,255,.15);}
+.nav-links-desktop a{padding:.4rem 1.2rem;font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;color:rgba(255,255,255,.65);font-weight:500;border-bottom:1px solid transparent;transition:all .25s;cursor:pointer;}
+.nav-links-desktop a:hover,.nav-links-desktop a.active{color:var(--rose);border-bottom-color:var(--rose);}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:1.1rem;color:#fff;position:relative;padding:.2rem;}
+.cbadge{position:absolute;top:-6px;right:-6px;background:var(--rose);color:#fff;border-radius:50%;width:16px;height:16px;font-size:.58rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.hamburger{display:none;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#fff;}
+
+/* mobile nav drawer */
+.mob-drawer{display:none;flex-direction:column;border-top:1px solid rgba(255,255,255,.1);background:var(--dark);}
+.mob-drawer.open{display:flex;}
+.mob-drawer a{padding:.9rem 2rem;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer;}
+.mob-drawer a:hover{color:var(--rose);}
+
+/* ════════════════════════════════
+   VIEW ROUTER
+════════════════════════════════ */
+.view{display:none;flex:1;}
+.view.active{display:flex;flex:1;flex-direction:column;}
+
+/* ════════════════════════════════
+   VIEW: INICIO — hero editorial oscuro
+════════════════════════════════ */
+.hero{
+  background:var(--white);color:var(--dark);
+  padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.hero::before{content:'';position:absolute;top:1.5rem;left:2.5rem;font-size:2.2rem;opacity:.1;}
+.hero::after{content:'';position:absolute;bottom:1.5rem;right:2.5rem;font-size:2.6rem;opacity:.08;}
+.hero-eye{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--fus);margin-bottom:1rem;font-weight:500;position:relative;display:inline-block;padding-bottom:.8rem;}
+.hero-eye::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:1px;background:var(--rose);}
+.hero-title{font-family:var(--font-heading);font-weight:400;font-size:clamp(2.4rem,5.5vw,4.4rem);line-height:1.15;margin-bottom:1rem;color:var(--dark);}
+.hero-title em{color:var(--rose);font-style:normal;font-size:1.12em;}
+.hero-sub{font-family:var(--font-accent);font-size:1.2rem;color:var(--muted);max-width:460px;margin:0 auto 1.8rem;line-height:1.6;}
+.btn{display:inline-block;padding:.82rem 2.1rem;border-radius:2px;font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .2s;border:none;font-family:var(--font-ui);}
+.btn-primary{background:var(--mag);color:#fff;}
+.btn-primary:hover{background:var(--dark);color:#fff;}
+.btn-ghost{background:transparent;color:var(--dark);border:1px solid var(--border);margin-left:.8rem;}
+.btn-ghost:hover{background:var(--papery);border-color:var(--mag);color:var(--mag);}
+
+/* promo strip */
+.strip{display:flex;overflow:hidden;background:var(--papery);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.65rem 0;}
+.strip-track{display:flex;gap:3rem;animation:scroll 20s linear infinite;white-space:nowrap;}
+@keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.strip-item{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fus);font-weight:500;display:flex;align-items:center;gap:.5rem;}
+.strip-item::before{content:'—';font-size:.7rem;color:var(--rose);}
+
+/* features — franja editorial con divisores */
+.features{padding:2.8rem 2rem;display:grid;grid-template-columns:repeat(5,1fr);gap:0;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border);}
+.feat{text-align:center;padding:1rem 1.2rem;border-right:1px solid var(--border);}
+.feat:last-child{border-right:none;}
+.feat-icon{font-size:1.5rem;margin-bottom:.7rem;opacity:.65;}
+.feat-title{font-family:var(--font-heading);font-size:1.15rem;margin-bottom:.3rem;}
+.feat-desc{font-size:.76rem;color:var(--muted);line-height:1.6;}
+
+/* bestsellers on landing — lista tipo índice editorial */
+.home-cats{padding:1rem 2rem 4rem;max-width:1100px;margin:0 auto;width:100%;}
+.sec-label{font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:var(--fus);font-weight:500;margin-bottom:.6rem;}
+.sec-title{font-family:var(--font-heading);font-size:2rem;margin-bottom:2.2rem;}
+.cat-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:0;counter-reset:catnum;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.cat-card{flex:1 1 140px;background:transparent;border:none;border-right:1px solid var(--border);border-radius:0;padding:2.6rem 1rem 2rem;text-align:center;cursor:pointer;transition:all .25s;position:relative;counter-increment:catnum;}
+.cat-card:last-child{border-right:none;}
+.cat-card::before{content:counter(catnum,decimal-leading-zero);position:absolute;top:.9rem;left:50%;transform:translateX(-50%);font-size:.65rem;letter-spacing:.15em;color:var(--fus);opacity:.6;}
+.cat-card:hover{background:var(--dark);color:#fff;}
+.cat-card:hover .cat-card-label{color:#fff;}
+.cat-card:hover .cat-card-sub{color:rgba(255,255,255,.7);}
+.cat-card-icon{font-size:1.8rem;margin-bottom:.7rem;line-height:1;opacity:.75;}
+.cat-card-label{font-family:var(--font-heading);font-size:1.35rem;font-weight:400;color:var(--dark);margin-bottom:.2rem;}
+.cat-card-sub{font-size:.7rem;color:var(--muted);letter-spacing:.05em;}
+
+/* instagram strip */
+.ig-section{background:var(--dark);color:#fff;padding:3.2rem 2rem;text-align:center;}
+.ig-section h2{font-family:var(--font-heading);font-weight:400;font-size:1.8rem;margin-bottom:.4rem;}
+.ig-section p{color:var(--blush);font-size:.85rem;margin-bottom:1.5rem;}
+.ig-handle{font-size:1rem;font-weight:600;color:var(--rose);letter-spacing:.08em;}
+
+/* ════════════════════════════════
+   VIEW: NOSOTROS — bloques asimétricos generosos
+════════════════════════════════ */
+.about-hero{background:var(--dark);color:#fff;padding:6rem 2rem;text-align:center;}
+.about-hero h1{font-family:var(--font-heading);font-weight:400;font-size:clamp(2.4rem,5.5vw,4rem);margin-bottom:1rem;}
+.about-hero p{color:var(--blush);font-size:1.05rem;max-width:520px;margin:0 auto;font-family:var(--font-accent);}
+.about-body{max-width:900px;margin:0 auto;padding:5rem 2rem;}
+.about-block{display:grid;grid-template-columns:1fr 1.1fr;gap:4rem;align-items:center;margin-bottom:5.5rem;}
+.about-block.rev{direction:rtl;}
+.about-block.rev > *{direction:ltr;}
+.about-img-ph{height:440px;background:var(--papery);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:5rem;border:1px solid var(--border);overflow:hidden;}
+.about-img-ph img{width:100%;height:100%;object-fit:cover;display:block;}
+.about-text .tag{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--fus);font-weight:500;margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px solid var(--rose);display:inline-block;}
+.about-text h2{font-family:var(--font-heading);font-weight:400;font-size:2.2rem;margin-bottom:1rem;line-height:1.25;}
+.about-text p{font-size:.92rem;color:var(--muted);line-height:1.9;margin-bottom:.9rem;}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:transparent;padding:3rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.val-item{text-align:center;padding:0 1.5rem;border-right:1px solid var(--border);}
+.val-item:last-child{border-right:none;}
+.val-icon{font-size:1.6rem;margin-bottom:.6rem;opacity:.7;}
+.val-title{font-family:var(--font-heading);font-weight:400;font-size:1.1rem;color:var(--mag);margin-bottom:.3rem;}
+.val-desc{font-size:.75rem;color:var(--muted);line-height:1.5;}
+@media(max-width:640px){.about-block{grid-template-columns:1fr;gap:1.5rem;}.about-block.rev{direction:ltr;}.values{grid-template-columns:1fr;}.val-item{border-right:none;border-bottom:1px solid var(--border);padding:1.5rem 0;}.val-item:last-child{border-bottom:none;}}
+
+/* ════════════════════════════════
+   VIEW: TÉRMINOS Y CONDICIONES
+════════════════════════════════ */
+.terms-list{max-width:700px;margin:0 auto;}
+.terms-item{padding:1.7rem 0;border-bottom:1px solid var(--border);}
+.terms-item:last-child{border-bottom:none;}
+.terms-tag{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fus);font-weight:600;margin-bottom:.5rem;}
+.terms-item h3{font-family:var(--font-heading);font-weight:400;font-size:1.35rem;margin-bottom:.5rem;color:var(--dark);}
+.terms-item p{font-size:.87rem;color:var(--muted);line-height:1.85;}
+
+/* ════════════════════════════════
+   VIEW: CATÁLOGO
+════════════════════════════════ */
+.cat-bar{background:var(--white);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.bar-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-right:.3rem;}
+.pill{padding:.36rem .95rem;border-radius:2rem;border:1px solid var(--border);background:none;font-size:.76rem;color:var(--muted);cursor:pointer;transition:all .15s;font-family:var(--font-ui);}
+.pill:hover,.pill.active{background:var(--mag);color:#fff;border-color:var(--mag);}
+.bar-divider{width:1px;height:18px;background:var(--border);margin:0 .3rem;}
+.srch-wrap{margin-left:auto;position:relative;}
+.srch-wrap input{padding:.36rem 1rem .36rem 2rem;border:1px solid var(--border);border-radius:2rem;font-size:.8rem;width:190px;background:var(--cream);outline:none;font-family:var(--font-ui);color:var(--dark);}
+.srch-wrap input:focus{border-color:var(--rose);}
+.srch-icon{position:absolute;left:.65rem;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(--muted);pointer-events:none;}
+.catalog-wrap{padding:2.2rem 2rem 4rem;}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.6rem;}
+.sec-head h2{font-family:var(--font-heading);font-weight:400;font-size:1.8rem;}
+.sec-head span{font-size:.78rem;color:var(--muted);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.1rem;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(20,10,25,.1);}
+.card-img{height:200px;background:var(--papery);display:flex;align-items:center;justify-content:center;font-size:4.2rem;position:relative;overflow:hidden;}
+.card-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.badge{position:absolute;top:9px;left:9px;background:var(--mag);color:#fff;font-size:.6rem;font-weight:600;padding:.2rem .55rem;letter-spacing:.07em;text-transform:uppercase;border-radius:1px;}
+.badge.sale{background:var(--rose);color:#fff;}
+.card-body{padding:.85rem 1rem 1rem;}
+.card-cat{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fus);margin-bottom:.2rem;font-weight:500;}
+.card-name{font-family:var(--font-accent);font-size:1.08rem;font-weight:600;margin-bottom:.12rem;color:var(--dark);}
+.card-sizes{font-size:.71rem;color:var(--muted);margin-bottom:.65rem;}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;}
+.card-actions{display:flex;gap:.5rem;}
+.card-price{font-size:.98rem;font-weight:700;color:var(--mag);}
+.card-price .old{font-size:.74rem;color:var(--blush);text-decoration:line-through;margin-left:.3rem;font-weight:400;}
+.add-btn{background:var(--dark);color:#fff;border:none;padding:.45rem .95rem;border-radius:2px;font-size:.73rem;font-weight:500;cursor:pointer;letter-spacing:.05em;transition:background .15s;font-family:var(--font-ui);}
+.add-btn:hover{background:var(--mag);}
+.look-btn{background:transparent;color:var(--dark);border:1px solid var(--border);padding:.45rem .95rem;border-radius:2px;font-size:.73rem;font-weight:500;cursor:pointer;letter-spacing:.05em;transition:all .15s;font-family:var(--font-ui);}
+.look-btn:hover{background:var(--papery);border-color:var(--mag);color:var(--mag);}
+.empty-state{text-align:center;padding:5rem 2rem;color:var(--muted);}
+.empty-state .eicon{font-size:3rem;margin-bottom:1rem;}
+
+/* ════════════════════════════════
+   VIEW: PEDIDO PERSONALIZADO
+════════════════════════════════ */
+.look-wrap{padding:2.5rem 2rem 4rem;max-width:640px;margin:0 auto;flex:1;width:100%;}
+.look-header{text-align:center;margin-bottom:2.5rem;}
+.look-header .tag{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--fus);font-weight:500;margin-bottom:.5rem;}
+.look-header h2{font-family:var(--font-heading);font-weight:400;font-size:2.3rem;margin-bottom:.5rem;}
+.look-header p{color:var(--muted);font-size:.88rem;max-width:480px;margin:0 auto;}
+
+/* formulario de pedido especial */
+.look-right{}
+.look-right h3{font-family:var(--font-heading);font-weight:400;font-size:1.35rem;margin-bottom:.8rem;color:var(--dark);}
+.form-field{margin-bottom:1rem;}
+.form-field label{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:.35rem;}
+.form-field input,.form-field textarea,.form-field select{
+  width:100%;padding:.65rem .8rem;border:1px solid var(--border);border-radius:2px;
+  font-size:.85rem;font-family:var(--font-ui);color:var(--dark);background:var(--white);outline:none;resize:vertical;
+}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{border-color:var(--rose);}
+.form-field textarea{min-height:90px;}
+.form-hint{font-size:.7rem;color:var(--muted);margin-top:.3rem;line-height:1.5;}
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.budget-chips{display:flex;gap:.5rem;flex-wrap:wrap;}
+.bchip{padding:.45rem .9rem;border:1px solid var(--border);border-radius:2rem;font-size:.75rem;color:var(--muted);cursor:pointer;background:none;font-family:var(--font-ui);transition:all .15s;}
+.bchip:hover{border-color:var(--rose);}
+.bchip.sel{background:var(--mag);color:#fff;border-color:var(--mag);}
+.special-submit{
+  width:100%;margin-top:.6rem;background:var(--mag);color:#fff;border:none;padding:.85rem;
+  border-radius:2px;font-size:.82rem;font-weight:600;cursor:pointer;letter-spacing:.05em;font-family:var(--font-ui);
+}
+.special-submit:hover{background:var(--dark);}
+.special-note{font-size:.7rem;color:var(--muted);text-align:center;margin-top:.6rem;line-height:1.6;}
+
+@media(max-width:720px){
+  .form-row2{grid-template-columns:1fr;}
+}
+
+/* ════════════════════════════════
+   CART OVERLAY
+════════════════════════════════ */
+.cart-overlay{display:none;position:fixed;inset:0;z-index:500;}
+.cart-bd{position:absolute;inset:0;background:rgba(10,10,21,.5);}
+.cart-panel{position:absolute;right:0;top:0;bottom:0;width:min(390px,100vw);background:var(--white);display:flex;flex-direction:column;}
+.cp-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.cp-head h2{font-family:var(--font-heading);font-weight:400;font-size:1.4rem;}
+.cp-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);}
+.cp-close:hover{color:var(--mag);}
+.cp-body{flex:1;overflow-y:auto;padding:.9rem 1.3rem;}
+.cp-empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.85rem;}
+.ci{display:flex;gap:.8rem;padding:.8rem 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.ci-img{width:54px;height:54px;background:var(--papery);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
+.ci-info{flex:1;}
+.ci-name{font-weight:500;font-size:.85rem;color:var(--dark);}
+.ci-size{font-size:.7rem;color:var(--muted);margin-top:.1rem;}
+.ci-price{font-weight:700;color:var(--mag);font-size:.88rem;margin-top:.15rem;}
+.qrow{display:flex;align-items:center;gap:.35rem;margin-top:.3rem;}
+.qb{width:20px;height:20px;border:1px solid var(--border);background:none;border-radius:2px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;}
+.qb:hover{background:var(--mag);color:#fff;border-color:var(--mag);}
+.qv{font-size:.8rem;font-weight:600;min-width:12px;text-align:center;}
+.ci-rm{background:none;border:none;color:var(--blush);cursor:pointer;font-size:.95rem;}
+.ci-rm:hover{color:var(--mag);}
+.cp-foot{padding:1rem 1.3rem;border-top:1px solid var(--border);}
+.tot-row{display:flex;justify-content:space-between;font-weight:700;font-size:.98rem;margin-bottom:.9rem;}
+.wa-btn{display:block;width:100%;padding:.9rem;background:#25D366;color:#fff;border:none;border-radius:2px;font-size:.85rem;font-weight:700;cursor:pointer;text-align:center;letter-spacing:.04em;font-family:var(--font-ui);transition:background .15s;}
+.wa-btn:hover{background:#1da851;}
+.cart-note{font-size:.68rem;color:var(--muted);text-align:center;margin-top:.45rem;}
+
+/* ════════════════════════════════
+   SIZE MODAL
+════════════════════════════════ */
+.sz-modal{display:none;position:fixed;inset:0;z-index:600;align-items:center;justify-content:center;}
+.sz-modal.open{display:flex;}
+.sz-bd{position:absolute;inset:0;background:rgba(10,10,21,.55);}
+.sz-box{position:relative;background:var(--white);border-radius:2px;padding:1.7rem;width:min(340px,90vw);}
+.sz-box h3{font-family:var(--font-heading);font-weight:400;font-size:1.3rem;margin-bottom:.2rem;}
+.sz-box p{font-size:.8rem;color:var(--muted);margin-bottom:1rem;}
+.sz-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:1rem;}
+.sz-opt{padding:.52rem;text-align:center;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:.83rem;font-weight:500;transition:all .15s;color:var(--dark);background:none;font-family:var(--font-ui);}
+.sz-opt:hover{border-color:var(--rose);}
+.sz-opt.sel{background:var(--mag);color:#fff;border-color:var(--mag);}
+.sz-confirm{width:100%;padding:.75rem;background:var(--mag);color:#fff;border:none;border-radius:2px;font-size:.82rem;font-weight:600;cursor:pointer;letter-spacing:.05em;font-family:var(--font-ui);}
+.sz-confirm:hover{background:var(--dark);}
+
+/* ════════════════════════════════
+   PRODUCT DETAIL MODAL
+════════════════════════════════ */
+.pd-modal{display:none;position:fixed;inset:0;z-index:700;align-items:center;justify-content:center;padding:1rem;}
+.pd-modal.open{display:flex;}
+.pd-bd{position:absolute;inset:0;background:rgba(10,10,21,.6);}
+.pd-box{
+  position:relative;background:var(--white);border-radius:2px;
+  width:min(820px,100%);max-height:90vh;overflow-y:auto;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.pd-box::-webkit-scrollbar{width:4px;}
+.pd-box::-webkit-scrollbar-thumb{background:var(--border);}
+.pd-gallery{position:relative;background:var(--papery);min-height:380px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:2px 0 0 2px;}
+.pd-main-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:opacity .3s;}
+.pd-main-emoji{font-size:7rem;z-index:1;}
+.pd-thumb-row{position:absolute;bottom:.8rem;left:50%;transform:translateX(-50%);display:flex;gap:.4rem;z-index:2;}
+.pd-thumb{width:46px;height:46px;border-radius:2px;border:2px solid rgba(255,255,255,.6);background:var(--white);overflow:hidden;cursor:pointer;transition:border-color .15s;flex-shrink:0;}
+.pd-thumb img{width:100%;height:100%;object-fit:cover;}
+.pd-thumb.active{border-color:var(--mag);}
+.pd-close{position:absolute;top:.8rem;right:.8rem;background:rgba(255,255,255,.9);border:none;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;color:var(--dark);}
+.pd-close:hover{background:var(--mag);color:#fff;}
+.pd-info{padding:2rem 1.8rem;display:flex;flex-direction:column;gap:.9rem;}
+.pd-cat{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fus);font-weight:500;}
+.pd-name{font-family:var(--font-heading);font-weight:400;font-size:1.9rem;line-height:1.2;color:var(--dark);}
+.pd-price{font-size:1.3rem;font-weight:700;color:var(--mag);}
+.pd-price .pd-old{font-size:.9rem;color:var(--blush);text-decoration:line-through;margin-left:.4rem;font-weight:400;}
+.pd-section-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:.4rem;}
+.color-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.color-swatch{
+  width:30px;height:30px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;transition:all .15s;position:relative;
+  box-shadow:0 1px 4px rgba(0,0,0,.15);
+}
+.color-swatch:hover{transform:scale(1.12);}
+.color-swatch.active{border-color:var(--dark);box-shadow:0 0 0 2px var(--white),0 0 0 4px var(--dark);}
+.color-label{font-size:.8rem;color:var(--muted);margin-left:.2rem;}
+.pd-sizes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem;}
+.pd-sz{padding:.48rem;text-align:center;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:.78rem;font-weight:500;transition:all .15s;color:var(--dark);background:none;font-family:var(--font-ui);}
+.pd-sz:hover{border-color:var(--rose);}
+.pd-sz.sel{background:var(--mag);color:#fff;border-color:var(--mag);}
+.pd-desc{font-size:.82rem;color:var(--muted);line-height:1.7;}
+.pd-add-btn{background:var(--mag);color:#fff;border:none;padding:.9rem;border-radius:2px;font-size:.85rem;font-weight:600;cursor:pointer;letter-spacing:.06em;font-family:var(--font-ui);transition:background .15s;width:100%;}
+.pd-add-btn:hover{background:var(--dark);}
+.pd-look-btn{background:var(--dark);color:#fff;border:none;padding:.9rem;border-radius:2px;font-size:.85rem;font-weight:600;cursor:pointer;letter-spacing:.06em;font-family:var(--font-ui);transition:background .15s;width:100%;margin-top:.55rem;}
+.pd-look-btn:hover{background:var(--mag);}
+.pd-wa-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.7rem;border-radius:2px;font-size:.8rem;cursor:pointer;font-family:var(--font-ui);width:100%;transition:all .15s;margin-top:.55rem;}
+.pd-wa-btn:hover{border-color:#25D366;color:#25D366;}
+@media(max-width:640px){
+  .pd-box{grid-template-columns:1fr;max-height:95vh;}
+  .pd-gallery{min-height:260px;border-radius:2px 2px 0 0;}
+  .pd-info{padding:1.3rem 1.2rem;}
+}
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+.site-footer{background:var(--dark);color:#fff;padding:3.5rem 2rem 1.5rem;margin-top:auto;}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;margin-bottom:2rem;}
+.footer-col h4{font-family:var(--font-heading);font-weight:400;font-size:1.15rem;margin-bottom:.8rem;color:var(--blush);}
+.footer-col p,.footer-col a{font-size:.78rem;color:rgba(255,255,255,.6);text-decoration:none;line-height:1.9;display:block;}
+.footer-col a:hover{color:var(--rose);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.footer-bottom p{font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.05em;}
+.socials{display:flex;gap:.8rem;}
+.socials a{font-size:.78rem;color:rgba(255,255,255,.4);text-decoration:none;}
+.socials a:hover{color:var(--rose);}
+
+/* ════════════════════════════════
+   TOAST
+════════════════════════════════ */
+.toast{position:fixed;bottom:1.6rem;left:50%;transform:translateX(-50%);background:var(--mag);color:#fff;padding:.65rem 1.5rem;border-radius:2rem;font-size:.8rem;font-weight:500;z-index:700;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+/* ════════════════════════════════
+   RESPONSIVE HELPERS
+════════════════════════════════ */
+/* ---- TABLET (≤900px) ---- */
+@media(max-width:900px){
+  .features{grid-template-columns:repeat(3,1fr);}
+  .cat-cards{grid-template-columns:repeat(2,1fr);}
+}
+
+/* ---- MOBILE (≤640px) ---- */
+@media(max-width:640px){
+  .nav-links-desktop{display:none;}
+  .hamburger{display:block;}
+  .nav-top{padding:.8rem 1rem;justify-content:space-between;}
+  .nav-right{position:static;transform:none;}
+  .logo{font-size:1.3rem;}
+  .hero{padding:2.5rem 1rem 2.2rem;}
+  .hero::before,.hero::after{font-size:1.6rem;}
+  .cat-bar{padding:.7rem 1rem;}
+  .srch-wrap{margin-left:0;width:100%;}
+  .srch-wrap input{width:100%;}
+  .catalog-wrap{padding:1.5rem 1rem 3rem;}
+  .look-wrap{padding:1.5rem 1rem 3rem;}
+  .about-body{padding:2.5rem 1rem;}
+  .features{grid-template-columns:repeat(2,1fr);padding:3rem 1rem;}
+  .feat{border-right:none;border-bottom:1px solid var(--border);}
+  .cat-cards{grid-template-columns:repeat(2,1fr);}
+  .cat-card{border-right:none;border-bottom:1px solid var(--border);}
+  .home-cats{padding:1rem 1rem 3rem;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+  .pd-sizes-grid{grid-template-columns:repeat(3,1fr);}
+  .sz-grid{grid-template-columns:repeat(3,1fr);}
+}
+
+/* ---- MOBILE PEQUEÑO (≤420px) ---- */
+@media(max-width:420px){
+  .features{grid-template-columns:1fr 1fr;}
+  .cat-cards{grid-template-columns:1fr 1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .hero-sub{font-size:1.05rem;}
+}
+</style>
+</head>
+<!-- Runtime fix: convierto rutas absolutas "/Img/..." a relativas "Img/..." para evitar 404 en GitHub Pages -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('img').forEach(function(img){
+    try{
+      var s = img.getAttribute('src');
+      if(s && s.indexOf('/Img/') === 0){ img.setAttribute('src', s.slice(1)); }
+    }catch(e){}
+  });
+});
+</script>
+<body>
+
+<!-- #EDITAR — Texto de la barra de anuncio (arriba de todo el sitio) -->
+<div class="ann">DESCUBRE LA BELLEZA GÓTICA QUE TE ENVUELVE</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-top">
+    <!-- #EDITAR — Logo (imagen) y nombre de marca en el menú -->
+    <a class="logo" href="#" onclick="showView('inicio');return false;">
+      <img class="logo-icon" src="./Img/marca/logo.png" alt="Lilith be Chamberi" onerror="this.style.display='none'">
+      Lilith <em>be Chamberi</em>
+    </a>
+    <ul class="nav-links-desktop">
+      <li><a onclick="showView('inicio')" id="nav-inicio" class="active">Inicio</a></li>
+      <li><a onclick="showView('catalogo')" id="nav-catalogo">Catálogo</a></li>
+      <li><a onclick="showView('look')" id="nav-look">Pedidos Especiales</a></li>
+      <li><a onclick="showView('nosotros')" id="nav-nosotros">Nosotros</a></li>
+      <li><a onclick="showView('terminos')" id="nav-terminos">Términos</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="icon-btn" onclick="openCart()" aria-label="Carrito">🛒<span class="cbadge" id="cart-count">0</span></button>
+      <button class="hamburger" onclick="toggleMob()" aria-label="Menú">☰</button>
+    </div>
+  </div>
+  <div class="mob-drawer" id="mob-drawer">
+    <a onclick="showView('inicio');closeMob()">Inicio</a>
+    <a onclick="showView('catalogo');closeMob()">Catálogo</a>
+    <a onclick="showView('look');closeMob()">Pedidos Especiales</a>
+    <a onclick="showView('nosotros');closeMob()">Nosotros</a>
+    <a onclick="showView('terminos');closeMob()">Términos</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     VIEW: INICIO
+════════════════════════════════════════ -->
+<div class="view active" id="view-inicio">
+  <!-- #EDITAR — Texto principal del hero (lo primero que ve el cliente) -->
+  <section class="hero">
+    <p class="hero-eye">Gargantillas · Chokers · Anillos · Aretes · Maquillaje · Collares · Pulseras</p>
+    <h1 class="hero-title">Accesorios que abren<br>la puerta a un mundo<br><em>alternativo</em></h1>
+    <p class="hero-sub">Explora tu lado oscuro con nuestra exclusiva colección.</p>
+    <button class="btn btn-primary" onclick="showView('catalogo')">Ver Catálogo</button>
+    <button class="btn btn-ghost" onclick="showView('look')">Solicitar diseño único</button>
+  </section>
+
+  <!-- #EDITAR — Frases de la cinta animada (se repiten 2 veces para el efecto de scroll continuo) -->
+  <div class="strip">
+    <div class="strip-track">
+      <span class="strip-item">Elegancia en cada detalle</span>
+      <span class="strip-item">Belleza que desafía</span>
+      <span class="strip-item">Estilo que perdura</span>
+      <span class="strip-item">Autenticidad gótica</span>
+      <span class="strip-item">Oscuridad sublime</span>
+      <span class="strip-item">Elegancia en cada detalle</span>
+      <span class="strip-item">Belleza que desafía</span>
+      <span class="strip-item">Estilo que perdura</span>
+      <span class="strip-item">Autenticidad gótica</span>
+      <span class="strip-item">Oscuridad sublime</span>
+    </div>
+  </div>
+
+  <!-- #EDITAR — Título de la sección "Explora por categoría" -->
+  <div style="padding:4rem 2rem 0;text-align:center;">
+    <p class="sec-label">Explora por categoría</p>
+    <h2 class="sec-title">Explora Nuestras Categorías</h2>
+  </div>
+  <!-- #EDITAR — Tarjetas de categorías en la portada (icono, nombre, descripción corta) -->
+  <div class="home-cats">
+    <div class="cat-cards">
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('gargantillas')">
+        <p class="cat-card-label">Gargantillas</p>
+        <p class="cat-card-sub"></p>
+      </div>
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('chokers')">
+        <p class="cat-card-label">Chokers</p>
+        <p class="cat-card-sub"></p>
+      </div>
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('anillos')">
+        <p class="cat-card-label">Anillos</p>
+        <p class="cat-card-sub"></p>
+      </div>
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('aretes')">
+        <p class="cat-card-label">Aretes</p>
+        <p class="cat-card-sub"></p>
+      </div>
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('maquillaje')">
+        <p class="cat-card-label">Maquillaje</p>
+        <p class="cat-card-sub"></p>
+      </div>
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('collares')">
+        <p class="cat-card-label">Collares</p>
+        <p class="cat-card-sub"></p>
+      </div>
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('pulseras')">
+        <p class="cat-card-label">Pulseras</p>
+        <p class="cat-card-sub"></p>
+      </div>
+      <div class="cat-card" onclick="showView('catalogo');filterFromHome('bolsos')">
+        <p class="cat-card-label">Bolsos</p>
+        <p class="cat-card-sub"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- #EDITAR — Bloques de "por qué comprar con nosotros" (icono, título, descripción) -->
+  <div class="features">
+    <div class="feat"><p class="feat-title">Diseños Únicos</p><p class="feat-desc">Accesorios que resaltan tu estilo.</p></div>
+    <div class="feat"><p class="feat-title">Maquillaje Artístico</p><p class="feat-desc">Colores intensos y duraderos.</p></div>
+    <div class="feat"><p class="feat-title">Atención Personalizada</p><p class="feat-desc">Estamos aquí para ayudarte.</p></div>
+    <div class="feat"><p class="feat-title">Envíos Rápidos</p><p class="feat-desc">Recibe tu pedido en tiempo récord.</p></div>
+    <div class="feat"><p class="feat-title">Pago Seguro</p><p class="feat-desc">Transacciones protegidas.</p></div>
+  </div>
+
+  <div class="ig-section">
+    <h2>Síguenos en Instagram</h2>
+    <p>Síguenos en Instagram para más novedades</p>
+    <!-- #EDITAR — Enlace y nombre de usuario de Instagram -->
+    <a href="https://www.instagram.com/lilith_de_chamberi/" target="_blank" rel="noopener noreferrer" class="ig-handle">@lilith_de_chamberi</a>
+  </div>
+
+  <!-- FOOTER inside inicio view -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <!-- #EDITAR — Nombre de marca y descripción corta en el footer -->
+        <h4>Lilith be Chamberi</h4>
+        <p id="footer-brand-desc">Lilith be Chamberi: Donde la oscuridad se encuentra con la elegancia.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <a onclick="showView('inicio')" style="cursor:pointer;">Inicio</a>
+        <a onclick="showView('catalogo')" style="cursor:pointer;">Catálogo</a>
+        <a onclick="showView('look')" style="cursor:pointer;">Pedidos Especiales</a>
+        <a onclick="showView('nosotros')" style="cursor:pointer;">Nosotros</a>
+        <a onclick="showView('terminos')" style="cursor:pointer;">Términos y Condiciones</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <!-- #EDITAR — Número de WhatsApp en formato wa.me (código de país + número, sin espacios/guiones) -->
+        <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <!-- #EDITAR — Enlace de Instagram -->
+        <a href="https://www.instagram.com/lilith_de_chamberi/">Instagram</a>
+        <!-- #EDITAR — Enlace de Facebook -->
+        <a href="https://www.tiktok.com/@lilithdechamber" target="_blank" rel="noopener noreferrer">TikTok</a>
+      </div>
+      <div class="footer-col">
+        <!-- #EDITAR — Datos generales del negocio (envíos, pago, horarios) -->
+        <h4>Info</h4>
+        <p>Enviamos a toda Honduras jaja</p>
+        <p>Aceptamos todas las tarjetas</p>
+        <p>Horario: L-V 9am-6pm</p>
+        <p>Estilo único garantizado</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <!-- #EDITAR — Nombre de marca y año en el copyright -->
+      <p>© 2026 Lilith be Chamberi — Todos los derechos reservados</p>
+      <div class="socials">
+        <!-- #EDITAR — Enlaces de redes sociales (footer-bottom) -->
+        <a href="https://www.instagram.com/lilith_de_chamberi/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     VIEW: NOSOTROS
+════════════════════════════════════════ -->
+<div class="view" id="view-nosotros">
+  <!-- #EDITAR — Título y subtítulo del encabezado "Nosotros" -->
+  <div class="about-hero">
+    <h1 id="nosotros-titulo">Sobre Nosotros</h1>
+    <p id="nosotros-subtitulo">Donde la Belleza y la Oscuridad Convergen</p>
+  </div>
+  <div class="about-body">
+    <div class="about-block">
+      <!-- #EDITAR — Imagen 1 de "Nosotros": coloca tu foto en Img/marca/nosotros-1.png (o cambia la ruta) -->
+      <div class="about-img-ph"><img src="./Img/marca/nosotros-1.png" alt="" onerror="this.parentElement.textContent='🖼️'"></div>
+      <!-- #EDITAR — Texto del primer bloque de la historia -->
+      <div class="about-text">
+        <p class="tag" id="nosotros-b1-tag">Nuestra Historia</p>
+        <h2 id="nosotros-b1-h2">El Inicio de un Sueño</h2>
+        <p id="nosotros-b1-p1">Lilith be Chamberi nació de un amor por lo gótico y lo elegante. Nuestro objetivo es ofrecer piezas únicas que resalten la belleza oscura de cada persona.</p>
+        <p id="nosotros-b1-p2">Desde nuestros inicios, hemos buscado combinar calidad con un estilo inigualable, creando una experiencia de compra que va más allá de lo convencional.</p>
+      </div>
+    </div>
+    <div class="about-block rev">
+      <!-- #EDITAR — Imagen 2 de "Nosotros": coloca tu foto en Img/marca/nosotros-2.png (o cambia la ruta) -->
+      <div class="about-img-ph"><img src="./Img/marca/nosotros-2.png" alt="" onerror="this.parentElement.textContent='🖼️'"></div>
+      <!-- #EDITAR — Texto del segundo bloque de la historia -->
+      <div class="about-text">
+        <p class="tag" id="nosotros-b2-tag">Nuestra Visión</p>
+        <h2 id="nosotros-b2-h2">Innovación y Estilo</h2>
+        <p id="nosotros-b2-p1">Creemos en la importancia de la autoexpresión a través del estilo personal. Cada producto es seleccionado cuidadosamente para asegurar que refleje nuestra esencia.</p>
+        <p id="nosotros-b2-p2">Nos esforzamos por ser líderes en el mercado gótico, siempre ofreciendo lo mejor a nuestros clientes con pasión y dedicación.</p>
+      </div>
+    </div>
+    <!-- #EDITAR — Los 3 valores de la marca (icono, título, descripción) -->
+    <div class="values">
+      <div class="val-item">
+        <p class="val-title">Calidad</p>
+        <p class="val-desc">Productos de primera.</p>
+      </div>
+      <div class="val-item">
+        <p class="val-title">Compromiso</p>
+        <p class="val-desc">Con nuestros clientes.</p>
+      </div>
+      <div class="val-item">
+        <p class="val-title">Pasión</p>
+        <p class="val-desc">Por el estilo gótico.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+      <button class="btn btn-primary" onclick="showView('catalogo')">Ver nuestra colección</button>
+      <!-- #EDITAR — Número de WhatsApp (botón "Escríbenos") -->
+      <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="text-decoration:none;">Escríbenos</a>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <!-- #EDITAR — Copyright y enlaces sociales (footer de Nosotros) -->
+      <p>© 2026 Lilith be Chamberi</p>
+      <div class="socials">
+        <a href="https://www.instagram.com/lilith_de_chamberi/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     VIEW: TÉRMINOS Y CONDICIONES
+════════════════════════════════════════ -->
+<div class="view" id="view-terminos">
+  <!-- #EDITAR — Título y subtítulo del encabezado "Términos y condiciones" -->
+  <div class="about-hero">
+    <h1>Términos y Condiciones</h1>
+    <p>Antes de tu pedido, ten en cuenta lo siguiente</p>
+  </div>
+  <div class="about-body" style="padding-top:3.5rem;">
+    <!-- #EDITAR — Puntos de términos y condiciones (título corto + descripción resumida) -->
+    <div class="terms-list">
+      <div class="terms-item">
+        <p class="terms-tag">Respeto y confianza</p>
+        <h3>Nos reservamos el derecho de admisión</h3>
+        <p>No procesamos pedidos de clientes con pagos pendientes o que hayan faltado el respeto a nuestro equipo. La seguridad y el trato respetuoso son fundamentales para nosotros.</p>
+      </div>
+      <div class="terms-item">
+        <p class="terms-tag">Cotizaciones y apartados</p>
+        <h3>Cotizar no reserva el producto</h3>
+        <p>El artículo se asigna a la primera persona que confirme el pago completo o realice el apartado del 50%. Si no confirmas el mismo día, no damos seguimiento y el producto puede agotarse.</p>
+      </div>
+      <div class="terms-item">
+        <p class="terms-tag">Envíos y entregas</p>
+        <h3>Mantente al pendiente de tu paquete</h3>
+        <p>Al confirmar tu pedido aceptas estar disponible para llamadas y mensajes durante la entrega. Para envíos nacionales se realizan un máximo de 2 intentos; si el paquete se regresa por causas del cliente, este asume el costo de ida y regreso, y no se harán nuevos envíos hasta cancelarlo.</p>
+      </div>
+      <div class="terms-item">
+        <p class="terms-tag">Cambios y devoluciones</p>
+        <h3>Solo por daño de fábrica o de envío</h3>
+        <p>Tienes de 1 a 2 días después de recibir tu paquete para notificarnos, presentando foto y video como evidencia. Por higiene, no se aceptan cambios en prendas usadas ni en medias de red.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem;">
+      <button class="btn btn-primary" onclick="showView('catalogo')">Ver nuestra colección</button>
+      <!-- #EDITAR — Número de WhatsApp (botón "Tengo dudas") -->
+      <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="text-decoration:none;">Tengo dudas</a>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <!-- #EDITAR — Copyright (footer de Términos) -->
+      <p>© 2026 Lilith be Chamberi</p>
+      <div class="socials">
+        <a href="https://www.instagram.com/lilith_de_chamberi/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     VIEW: CATÁLOGO
+════════════════════════════════════════ -->
+<div class="view" id="view-catalogo">
+  <!-- #EDITAR — FILTROS DEL CATÁLOGO
+       Si agregas/quitas categorías aquí, el valor de "onclick=filterPill('xxx',...)"
+       debe coincidir exactamente con el campo "cat" de cada producto en products.js -->
+  <div class="cat-bar">
+    <span class="bar-label">Categoría:</span>
+    <button class="pill active" id="pill-todos" onclick="filterPill('todos',this)">Todos</button>
+    <button class="pill" id="pill-gargantillas" onclick="filterPill('gargantillas',this)">Gargantillas</button>
+    <button class="pill" id="pill-chokers" onclick="filterPill('chokers',this)">Chokers</button>
+    <button class="pill" id="pill-anillos" onclick="filterPill('anillos',this)">Anillos</button>
+    <button class="pill" id="pill-aretes" onclick="filterPill('aretes',this)">Aretes</button>
+    <button class="pill" id="pill-maquillaje" onclick="filterPill('maquillaje',this)">Maquillaje</button>
+    <button class="pill" id="pill-collares" onclick="filterPill('collares',this)">Collares</button>
+    <button class="pill" id="pill-pulseras" onclick="filterPill('pulseras',this)">Pulseras</button>
+    <button class="pill" id="pill-bolsos" onclick="filterPill('bolsos',this)">Bolsos/Mochilas</button>
+    <button class="pill" id="pill-oferta" onclick="filterPill('oferta',this)">Oferta</button>
+    <div class="srch-wrap">
+      <span class="srch-icon">🔍</span>
+      <input type="text" placeholder="Buscar..." oninput="searchProds(this.value)">
+    </div>
+  </div>
+  <div class="catalog-wrap">
+    <div class="sec-head">
+      <h2>Colección</h2>
+      <span id="prod-count"></span>
+    </div>
+    <div class="grid" id="products-grid"></div>
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="eicon">🔍</div>
+      <p style="font-family:var(--font-accent);font-size:1.1rem;">Sin resultados para ese filtro.<br>Prueba con otro, o pide uno personalizado.</p>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <!-- #EDITAR — Copyright y WhatsApp (footer de Catálogo) -->
+      <p>© 2026 Lilith be Chamberi</p>
+      <div class="socials">
+        <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     VIEW: PEDIDO PERSONALIZADO
+════════════════════════════════════════ -->
+<div class="view" id="view-look">
+  <div class="look-wrap">
+    <!-- #EDITAR — Encabezado de la sección "Pedidos Especiales" -->
+    <div class="look-header">
+      <p class="tag">Pedido especial</p>
+      <h2>Pedidos Especiales</h2>
+      <p id="personalizado-desc">Cuéntanos cómo quieres que sea tu accesorio perfecto. Estamos aquí para hacerlo realidad.</p>
+    </div>
+
+    <!-- Formulario de pedido especial -->
+    <div class="look-right">
+      <h3>Datos de tu pedido</h3>
+      <div class="form-field">
+        <label for="sp-name">Nombre completo</label>
+        <input type="text" id="sp-name" placeholder="Ej: María López">
+      </div>
+      <div class="form-row2">
+        <div class="form-field">
+          <label for="sp-phone">Número de teléfono</label>
+          <input type="tel" id="sp-phone" placeholder="Ej: 9999-9999">
+        </div>
+        <div class="form-field">
+          <!-- #EDITAR — Opciones del menú "Tipo de pedido" -->
+          <label for="sp-category">Tipo de pedido</label>
+          <select id="sp-category">
+            <option value="Gargantillas">Gargantillas</option>
+            <option value="Chokers">Chokers</option>
+            <option value="Anillos">Anillos</option>
+            <option value="Aretes">Aretes</option>
+            <option value="Maquillaje">Maquillaje</option>
+            <option value="Collares">Collares</option>
+            <option value="Pulseras">Pulseras</option>
+            <option value="Bolsos/Mochilas">Bolsos/Mochilas</option>
+            <option value="No estoy seguro/a">No estoy seguro/a</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="sp-link">Link de referencia (opcional)</label>
+        <input type="url" id="sp-link" placeholder="Ej: enlace de Pinterest, Instagram o Google Drive">
+        <p class="form-hint">Pega aquí el link de una imagen o publicación que muestre el estilo que buscas.</p>
+      </div>
+      <div class="form-field">
+        <label>Presupuesto estimado (para cotizar)</label>
+        <!-- #EDITAR — Rangos de presupuesto (ajusta los montos a tus precios reales) -->
+        <div class="budget-chips" id="budget-chips">
+          <button type="button" class="bchip" onclick="pickBudget(this,'Menos de L. 500')">Menos de L. 500</button>
+          <button type="button" class="bchip" onclick="pickBudget(this,'L. 500-1000')">L. 500-1000</button>
+          <button type="button" class="bchip" onclick="pickBudget(this,'L. 1000-2000')">L. 1000-2000</button>
+          <button type="button" class="bchip" onclick="pickBudget(this,'Más de L. 2000')">Más de L. 2000</button>
+          <button type="button" class="bchip" onclick="pickBudget(this,'No estoy seguro/a')">No estoy seguro/a</button>
+        </div>
+        <p class="form-hint">Esto nos ayuda a darte una cotización ajustada a lo que buscas. El precio final se confirma por WhatsApp.</p>
+      </div>
+      <div class="form-field">
+        <label for="sp-comments">Comentarios</label>
+        <textarea id="sp-comments" placeholder="Cuéntanos los detalles de tu pedido: características, cuándo lo necesitas, o cualquier información que nos ayude a entenderlo mejor."></textarea>
+      </div>
+      <button class="special-submit" onclick="sendSpecialOrder()">📲 Enviar pedido por WhatsApp</button>
+      <p class="special-note">Nos pondremos en contacto contigo por WhatsApp para confirmar los detalles y coordinar la entrega.</p>
+    </div>
+  </div>
+  <footer class="site-footer">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <!-- #EDITAR — Copyright (footer de Pedido Personalizado) -->
+      <p>© 2026 Lilith be Chamberi</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ── PRODUCT DETAIL MODAL ── -->
+<div class="pd-modal" id="pd-modal">
+  <div class="pd-bd" onclick="closePD()"></div>
+  <div class="pd-box">
+    <!-- Galería -->
+    <div class="pd-gallery" id="pd-gallery">
+      <span class="pd-main-emoji" id="pd-main-emoji"></span>
+      <img class="pd-main-img" id="pd-main-img" src="" alt="" style="display:none;">
+      <div class="pd-thumb-row" id="pd-thumb-row"></div>
+      <button class="pd-close" onclick="closePD()">✕</button>
+    </div>
+    <!-- Info -->
+    <div class="pd-info">
+      <p class="pd-cat" id="pd-cat"></p>
+      <h2 class="pd-name" id="pd-name"></h2>
+      <p class="pd-price" id="pd-price"></p>
+
+      <!-- Colores -->
+      <div id="pd-colors-section">
+        <p class="pd-section-label">Color</p>
+        <div class="color-row" id="pd-color-row"></div>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:.3rem;" id="pd-color-name"></p>
+      </div>
+
+      <!-- Tallas (se oculta si el producto no tiene variantes reales de talla) -->
+      <div id="pd-sizes-section">
+        <p class="pd-section-label">Talla</p>
+        <div class="pd-sizes-grid" id="pd-sizes-grid"></div>
+      </div>
+
+      <!-- Descripción -->
+      <p class="pd-desc" id="pd-desc"></p>
+
+      <!-- Acciones -->
+      <button class="pd-add-btn" onclick="pdAddToCart()">Agregar al carrito</button>
+      <button class="pd-look-btn" onclick="openSpecialFromProduct(pdProd)">Pedir versión personalizada</button>
+      <button class="pd-wa-btn" onclick="pdDirectWA()">💬 Preguntar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CART OVERLAY ── -->
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-bd" onclick="closeCart()"></div>
+  <div class="cart-panel">
+    <div class="cp-head"><h2>Mi carrito</h2><button class="cp-close" onclick="closeCart()">✕</button></div>
+    <div class="cp-body" id="cp-body"></div>
+    <div class="cp-foot">
+      <div class="tot-row"><span>Total</span><span id="cart-total">L. 0.00</span></div>
+      <button class="wa-btn" onclick="sendWA()">📲 Pedir por WhatsApp</button>
+      <p class="cart-note">Te llevaremos a WhatsApp con tu pedido listo</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SIZE MODAL ── -->
+<div class="sz-modal" id="sz-modal">
+  <div class="sz-bd" onclick="closeSz()"></div>
+  <div class="sz-box">
+    <h3 id="sz-title"></h3>
+    <p>Selecciona tu talla</p>
+    <div class="sz-grid" id="sz-grid"></div>
+    <button class="sz-confirm" onclick="confirmAdd()">Agregar al carrito</button>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script src="products.js"></script>
+<script>
+/* ══ CONFIG ══ */
+// #EDITAR — NÚMERO DE WHATSAPP (con código de país, sin espacios ni guiones, ej: 50499990000)
+// Este número se usa para los botones "Pedir por WhatsApp" del carrito y de Pedido Personalizado.
+const WA_NUM = '50492539242';
+
+// #EDITAR — SÍMBOLO DE MONEDA que se muestra en todos los precios del sitio
+const MONEDA = 'L.';
+
+// #EDITAR — ALERTA DE BAJO STOCK
+// Cuando un producto tiene un número de unidades igual o menor a este valor
+// (y mayor a 0), se muestra la etiqueta "¡Últimas unidades!" para generar urgencia.
+// Cambia el número según lo que consideres "poco stock" para tu negocio.
+const LOW_STOCK_THRESHOLD = 3;
+
+// #EDITAR — GOOGLE SHEET DE PRODUCTOS (opcional)
+// Pega aquí el link de "Publicar en la web" de tu Google Sheet en formato CSV (Archivo → Compartir → Publicar en la web → CSV).
+// Si lo dejas vacío, o si el Sheet no carga, se usan los productos de muestra de products.js.
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1Lp1XrDh7E5De6as838QYhLFyOS8UPtFZWXsC6uoOVwg/edit?usp=sharing';
+
+/* ══ STATE ══ */
+let cart=[], selProd=null, selSize=null, catFilter='todos', srchTerm='';
+
+// #EDITAR — ETIQUETAS DE CATEGORÍA (lo que se MUESTRA en las tarjetas de producto)
+// La clave (ej: "gargantillas") debe ser igual al campo "cat" en products.js
+// El valor (ej: "Gargantillas") es el texto visible para el cliente
+const categoryLabels = {
+  gargantillas:'Gargantillas',
+  chokers:'Chokers',
+  anillos:'Anillos',
+  aretes:'Aretes',
+  maquillaje:'Maquillaje',
+  collares:'Collares',
+  pulseras:'Pulseras',
+  bolsos:'Bolsos/Mochilas'
+};
+let selectedBudget=null;
+
+/* ══ NAVIGATION ══ */
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.nav-links-desktop a').forEach(a=>a.classList.remove('active'));
+  const nl=document.getElementById('nav-'+name);
+  if(nl)nl.classList.add('active');
+  window.scrollTo(0,0);
+}
+function toggleMob(){document.getElementById('mob-drawer').classList.toggle('open');}
+function closeMob(){document.getElementById('mob-drawer').classList.remove('open');}
+
+/* ══ CATALOG ══ */
+function filterFromHome(cat){
+  catFilter=cat;srchTerm='';
+  document.querySelectorAll('#view-catalogo .cat-bar .pill').forEach(p=>p.classList.remove('active'));
+  const pill=document.getElementById('pill-'+cat);
+  if(pill)pill.classList.add('active');
+  else document.getElementById('pill-todos').classList.add('active');
+  applyFilters();
+}
+function filterPill(f,btn){
+  catFilter=f;
+  document.querySelectorAll('.cat-bar .pill').forEach(p=>{
+    if(p.id.startsWith('pill-')) p.classList.remove('active');
+  });
+  btn.classList.add('active');
+  applyFilters();
+}
+function searchProds(v){srchTerm=v;applyFilters();}
+function applyFilters(){
+  const list=products.filter(p=>{
+    const mc=catFilter==='todos'||p.cat===catFilter||(catFilter==='oferta'&&p.oldPrice);
+    const ms=!srchTerm||p.name.toLowerCase().includes(srchTerm.toLowerCase());
+    return mc&&ms;
+  });
+  renderProds(list);
+}
+function renderProds(list){
+  const g=document.getElementById('products-grid');
+  const em=document.getElementById('empty-state');
+  document.getElementById('prod-count').textContent=list.length+' producto'+(list.length!==1?'s':'');
+  if(!list.length){g.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  g.innerHTML=list.map(p=>{
+    // Foto: primero la del color seleccionado (si el producto tiene variantes de color),
+    // si no, la foto simple del producto (campo "photo"/"imagen") — el emoji es solo el
+    // último respaldo cuando no hay ninguna imagen real.
+    const firstPhoto = (p.colors&&p.colors[0]&&p.colors[0].photos&&p.colors[0].photos[0]) ? p.colors[0].photos[0] : (p.photo || null);
+    const swatches = p.colors ? p.colors.map(c=>`<span title="${c.name}" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${c.hex};border:1.5px solid rgba(0,0,0,.15);margin-right:2px;"></span>`).join('') : '';
+    // "Tallas" solo se muestra si el producto realmente tiene variantes — si es la única
+    // opción implícita ("Único"), mostrarlo es ruido para negocios que no venden ropa/calzado.
+    const tieneTallas = p.sizes && p.sizes.length && !(p.sizes.length===1 && p.sizes[0]==='Único');
+    // Si "stock" viene definido (no es null) y es 0, el producto se marca como agotado.
+    // Si el campo no se usa (null), el producto se trata como disponible siempre.
+    const agotado = p.stock!==undefined && p.stock!==null && p.stock<=0;
+    const bajoStock = !agotado && p.stock!==undefined && p.stock!==null && p.stock<=LOW_STOCK_THRESHOLD;
+    return `
+    <div class="card" onclick="openPD(${p.id})" style="cursor:pointer;${agotado?'opacity:.55;':''}">
+      <div class="card-img">
+        ${firstPhoto?`<img src="${firstPhoto}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">`:p.emoji}
+        ${agotado?`<span class="badge sale">Agotado</span>`:(p.badge?`<span class="badge${p.oldPrice?' sale':''}">${p.badge}</span>`:'')}
+      </div>
+      <div class="card-body">
+        <p class="card-cat">${categoryLabels[p.cat]||p.cat}</p>
+        <p class="card-name">${p.name}</p>
+        ${swatches?`<div style="margin:.3rem 0 .4rem;">${swatches}<span style="font-size:.68rem;color:var(--muted);vertical-align:middle;margin-left:2px;">${p.colors.length} color${p.colors.length>1?'es':''}</span></div>`:''}
+        ${tieneTallas?`<p class="card-sizes">Tallas: ${p.sizes.join(' · ')}</p>`:''}
+        ${bajoStock?`<p style="font-size:.72rem;color:var(--rose);font-weight:600;margin-bottom:.4rem;">⚠ ¡Últimas ${p.stock} unidades!</p>`:''}
+        <div class="card-foot">
+          <span class="card-price">
+            ${MONEDA} ${p.price.toLocaleString('es-HN')}
+            ${p.oldPrice?`<span class="old">${MONEDA} ${p.oldPrice.toLocaleString('es-HN')}</span>`:''}
+          </span>
+          <div class="card-actions">
+            <button class="add-btn" onclick="event.stopPropagation();openPD(${p.id})">Ver</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ SIZE MODAL ══ */
+function openSz(id){
+  selProd=products.find(p=>p.id===id);selSize=null;
+  document.getElementById('sz-title').textContent=selProd.name;
+  document.getElementById('sz-grid').innerHTML=selProd.sizes.map(s=>
+    `<button class="sz-opt" onclick="pickSz(this,'${s}')">${s}</button>`
+  ).join('');
+  document.getElementById('sz-modal').classList.add('open');
+}
+function closeSz(){document.getElementById('sz-modal').classList.remove('open');selProd=null;selSize=null;}
+function pickSz(el,s){
+  document.querySelectorAll('.sz-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');selSize=s;
+}
+function confirmAdd(){
+  if(!selSize){showToast('Elige una talla primero');return;}
+  addToCart(selProd,selSize);
+  closeSz();
+}
+function addToCart(prod,size){
+  const ex=cart.find(i=>i.id===prod.id&&i.size===size);
+  if(ex)ex.qty++;
+  else cart.push({...prod,size,qty:1});
+  updateCart();
+  showToast('✓ '+prod.name+' (talla '+size+') agregado');
+}
+
+/* ══ CART ══ */
+function updateCart(){
+  const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const cnt=cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cart-count').textContent=cnt;
+  document.getElementById('cart-total').textContent=MONEDA+' '+tot.toLocaleString('es-HN',{minimumFractionDigits:2});
+}
+function renderCart(){
+  const b=document.getElementById('cp-body');
+  if(!cart.length){b.innerHTML='<div class="cp-empty">🛒<br><br>Tu carrito está vacío</div>';return;}
+  b.innerHTML=cart.map(i=>`
+    <div class="ci">
+      <div class="ci-img">${i.emoji||'📦'}</div>
+      <div class="ci-info">
+        <p class="ci-name">${i.name}</p>
+        <p class="ci-size">${i.color?'Color: '+i.color+' · ':''}Talla ${i.size}</p>
+        <p class="ci-price">${MONEDA} ${(i.price*i.qty).toLocaleString('es-HN')}</p>
+        <div class="qrow">
+          <button class="qb" onclick="chQty(${i.id},'${i.size}',-1)">−</button>
+          <span class="qv">${i.qty}</span>
+          <button class="qb" onclick="chQty(${i.id},'${i.size}',1)">+</button>
+        </div>
+      </div>
+      <button class="ci-rm" onclick="rmItem(${i.id},'${i.size}')">✕</button>
+    </div>
+  `).join('');
+}
+function rmItem(id,sz){cart=cart.filter(i=>!(i.id===id&&i.size===sz));updateCart();renderCart();}
+function chQty(id,sz,d){
+  const i=cart.find(i=>i.id===id&&i.size===sz);if(!i)return;
+  i.qty+=d;if(i.qty<=0)rmItem(id,sz);else{updateCart();renderCart();}
+}
+function openCart(){renderCart();document.getElementById('cart-overlay').style.display='block';}
+function closeCart(){document.getElementById('cart-overlay').style.display='none';}
+function sendWA(){
+  if(!cart.length){showToast('Tu carrito está vacío');return;}
+  const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  // #EDITAR — Texto del mensaje de WhatsApp que se genera al enviar el carrito
+  let msg='Hola, quiero hacer un pedido de Lilith be Chamberi:\n\n';
+  cart.forEach(i=>{msg+=`${i.name}${i.color?' ('+i.color+')':''} — Talla ${i.size} x${i.qty} = ${MONEDA} ${(i.price*i.qty).toLocaleString('es-HN')}\n`;});
+  msg+=`\n*Total: ${MONEDA} ${tot.toLocaleString('es-HN',{minimumFractionDigits:2})}*\n\n¿Pueden confirmar disponibilidad? Gracias`;
+  window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+/* ══ PEDIDO PERSONALIZADO ══ */
+function pickBudget(el,label){
+  document.querySelectorAll('.bchip').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedBudget=label;
+}
+function openSpecialFromProduct(prod){
+  closePD();
+  showView('look');
+  if(prod){
+    // La categoría real del producto (categoryLabels) rara vez coincide literal
+    // con las opciones del select (personalizado_tipos, redactadas por la IA),
+    // así que se busca la mejor coincidencia y si no hay ninguna, se cae a la
+    // última opción (siempre "No estoy seguro/a") en vez de asumir un rubro fijo.
+    const sel=document.getElementById('sp-category');
+    const label=(categoryLabels[prod.cat]||prod.cat||'').toLowerCase();
+    const opts=Array.from(sel.options).map(o=>o.value);
+    const match=opts.find(o=>o.toLowerCase()===label)
+      || opts.find(o=>label && (o.toLowerCase().includes(label)||label.includes(o.toLowerCase())));
+    sel.value = match || opts[opts.length-1] || '';
+    const c=document.getElementById('sp-comments');
+    if(!c.value) c.value='Me interesa una versión personalizada de "'+prod.name+'".';
+  }
+}
+function sendSpecialOrder(){
+  const name=document.getElementById('sp-name').value.trim();
+  const phone=document.getElementById('sp-phone').value.trim();
+  const category=document.getElementById('sp-category').value;
+  const link=document.getElementById('sp-link').value.trim();
+  const comments=document.getElementById('sp-comments').value.trim();
+
+  if(!name||!phone){
+    showToast('Completa tu nombre y teléfono primero');
+    return;
+  }
+
+  // #EDITAR — Texto del mensaje de WhatsApp del pedido especial (Pedido Personalizado)
+  let msg='Hola, quiero un pedido especial en Lilith be Chamberi:\n\n';
+  msg+=`👤 Nombre: ${name}\n`;
+  msg+=`📞 Teléfono: ${phone}\n`;
+  msg+=`🏷️ Tipo: ${category}\n`;
+  if(selectedBudget) msg+=`💰 Presupuesto estimado: ${selectedBudget}\n`;
+  if(link) msg+=`🔗 Referencia: ${link}\n`;
+  if(comments) msg+=`📝 Comentarios: ${comments}\n`;
+  msg+='\n¿Podrían darme una cotización? Gracias';
+
+  window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
+  showToast('✓ Te llevamos a WhatsApp para completar tu pedido');
+}
+
+/* ══ PRODUCT DETAIL MODAL ══ */
+let pdProd=null, pdColor=null, pdSize=null;
+
+function openPD(id){
+  pdProd=products.find(p=>p.id===id);
+  pdColor=pdProd.colors&&pdProd.colors.length ? pdProd.colors[0] : null;
+  pdSize=null;
+  document.getElementById('pd-cat').textContent=categoryLabels[pdProd.cat]||pdProd.cat;
+  document.getElementById('pd-name').textContent=pdProd.name;
+  document.getElementById('pd-desc').textContent=pdProd.desc||'';
+  let priceHTML=MONEDA+' '+pdProd.price.toLocaleString('es-HN');
+  if(pdProd.oldPrice) priceHTML+=' <span class="pd-old">'+MONEDA+' '+pdProd.oldPrice.toLocaleString('es-HN')+'</span>';
+  document.getElementById('pd-price').innerHTML=priceHTML;
+
+  // Agotado: si "stock" está definido y es 0, se avisa y se bloquea el botón de agregar.
+  const agotado = pdProd.stock!==undefined && pdProd.stock!==null && pdProd.stock<=0;
+  const addBtn=document.querySelector('.pd-add-btn');
+  if(agotado){
+    addBtn.textContent='Agotado';
+    addBtn.disabled=true;
+    addBtn.style.opacity='.5';
+    addBtn.style.cursor='not-allowed';
+  } else {
+    addBtn.textContent='Agregar al carrito';
+    addBtn.disabled=false;
+    addBtn.style.opacity='';
+    addBtn.style.cursor='';
+  }
+
+  // Alerta de bajo stock: aviso visible junto al precio cuando quedan pocas unidades.
+  let stockNote=document.getElementById('pd-stock-note');
+  if(!stockNote){
+    stockNote=document.createElement('p');
+    stockNote.id='pd-stock-note';
+    stockNote.style.cssText='font-size:.78rem;font-weight:600;margin-top:-.3rem;';
+    document.getElementById('pd-price').insertAdjacentElement('afterend',stockNote);
+  }
+  const bajoStock = !agotado && pdProd.stock!==undefined && pdProd.stock!==null && pdProd.stock<=LOW_STOCK_THRESHOLD;
+  if(bajoStock){
+    stockNote.textContent='⚠ ¡Últimas '+pdProd.stock+' unidades disponibles!';
+    stockNote.style.color='var(--rose)';
+    stockNote.style.display='block';
+  } else {
+    stockNote.style.display='none';
+  }
+
+  // Talla: si el producto no tiene variantes reales (solo la opción implícita "Único"),
+  // se oculta el paso y se preselecciona sola — no tiene sentido pedir talla para
+  // productos que no son ropa/calzado (ej. equipo de DJ, tecnología).
+  const tieneTallas = pdProd.sizes && pdProd.sizes.length && !(pdProd.sizes.length===1 && pdProd.sizes[0]==='Único');
+  const sizesSection = document.getElementById('pd-sizes-section');
+  if(tieneTallas){
+    sizesSection.style.display='block';
+    document.getElementById('pd-sizes-grid').innerHTML=pdProd.sizes.map(s=>
+      `<button class="pd-sz" onclick="pdPickSize(this,'${s}')">${s}</button>`
+    ).join('');
+  } else {
+    sizesSection.style.display='none';
+    pdSize = (pdProd.sizes && pdProd.sizes[0]) || 'Único';
+  }
+
+  const colorSection=document.getElementById('pd-colors-section');
+  if(pdProd.colors&&pdProd.colors.length){
+    colorSection.style.display='block';
+    renderPDColors();
+    pdSetColor(pdProd.colors[0],0);
+  } else {
+    colorSection.style.display='none';
+    // Foto simple del producto (campo "photo"/"imagen"), y el emoji solo si no hay ninguna imagen real.
+    if(pdProd.photo){
+      document.getElementById('pd-main-emoji').style.display='none';
+      document.getElementById('pd-main-img').style.display='block';
+      document.getElementById('pd-main-img').src=pdProd.photo;
+    } else {
+      document.getElementById('pd-main-emoji').style.display='block';
+      document.getElementById('pd-main-emoji').textContent=pdProd.emoji||'📦';
+      document.getElementById('pd-main-img').style.display='none';
+    }
+    document.getElementById('pd-thumb-row').innerHTML='';
+  }
+  document.getElementById('pd-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closePD(){
+  document.getElementById('pd-modal').classList.remove('open');
+  document.body.style.overflow='';
+  pdProd=null;pdColor=null;pdSize=null;
+}
+
+function renderPDColors(){
+  if(!pdProd||!pdProd.colors)return;
+  document.getElementById('pd-color-row').innerHTML=pdProd.colors.map((c,i)=>
+    `<span class="color-swatch${i===0?' active':''}" style="background:${c.hex};" title="${c.name}" onclick="pdSetColor(pdProd.colors[${i}],${i})"></span>`
+  ).join('');
+}
+
+function pdSetColor(color,idx){
+  pdColor=color;
+  document.querySelectorAll('.color-swatch').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.getElementById('pd-color-name').textContent=color.name;
+  const hasPhotos=color.photos&&color.photos.length;
+  const mainImg=document.getElementById('pd-main-img');
+  const mainEmoji=document.getElementById('pd-main-emoji');
+  if(hasPhotos){
+    mainImg.src=color.photos[0];
+    mainImg.style.display='block';
+    mainEmoji.style.display='none';
+    document.getElementById('pd-thumb-row').innerHTML=color.photos.map((ph,i)=>
+      `<div class="pd-thumb${i===0?' active':''}" onclick="pdSetMainPhoto('${ph}',this)"><img src="${ph}" alt="" onerror="this.parentElement.style.display='none'"></div>`
+    ).join('');
+  } else {
+    mainImg.style.display='none';
+    mainEmoji.style.display='block';
+    mainEmoji.textContent=pdProd.emoji||'📦';
+    document.getElementById('pd-thumb-row').innerHTML='';
+  }
+}
+
+function pdSetMainPhoto(src,thumbEl){
+  document.getElementById('pd-main-img').src=src;
+  document.querySelectorAll('.pd-thumb').forEach(t=>t.classList.remove('active'));
+  thumbEl.classList.add('active');
+}
+
+function pdPickSize(el,s){
+  document.querySelectorAll('.pd-sz').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');pdSize=s;
+}
+
+function pdAddToCart(){
+  if(pdProd.stock!==undefined&&pdProd.stock!==null&&pdProd.stock<=0){showToast('Este producto está agotado');return;}
+  if(!pdSize){showToast('Elige una talla primero');return;}
+  if(!pdColor&&pdProd.colors&&pdProd.colors.length){showToast('Elige un color primero');return;}
+  const colorLabel=pdColor?pdColor.name:null;
+  const ex=cart.find(i=>i.id===pdProd.id&&i.size===pdSize&&i.color===colorLabel);
+  if(ex)ex.qty++;
+  else cart.push({...pdProd,size:pdSize,color:colorLabel,qty:1});
+  updateCart();
+  showToast('✓ '+pdProd.name+(colorLabel?' — '+colorLabel:'')+(pdSize&&pdSize!=='Único'?' talla '+pdSize:'')+' agregado');
+  closePD();
+}
+
+function pdDirectWA(){
+  const colorLabel=pdColor?pdColor.name:'';
+  // #EDITAR — Texto del mensaje de WhatsApp al preguntar por un producto desde su ficha
+  let msg='Hola, me interesa este producto de Lilith be Chamberi:\n\n';
+  msg+=`*${pdProd.name}*\n`;
+  if(colorLabel)msg+=`Color: ${colorLabel}\n`;
+  msg+=`Precio: ${MONEDA} ${pdProd.price.toLocaleString('es-HN')}\n\n¿Está disponible? ¿Cuáles tallas tienen?`;
+  window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+/* ══ TOAST ══ */
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* ══ CATÁLOGO DESDE GOOGLE SHEETS (opcional) ══ */
+// Parser CSV básico (RFC4180): soporta comas y saltos de línea dentro de campos entre comillas.
+function parseCSV(text){
+  const rows=[];let row=[];let field='';let inQuotes=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(inQuotes){
+      if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;} else{inQuotes=false;} }
+      else field+=c;
+    } else {
+      if(c==='"') inQuotes=true;
+      else if(c===','){row.push(field);field='';}
+      else if(c==='\r'){ /* ignorar */ }
+      else if(c==='\n'){row.push(field);rows.push(row);row=[];field='';}
+      else field+=c;
+    }
+  }
+  if(field.length||row.length){row.push(field);rows.push(row);}
+  return rows.filter(r=>r.some(v=>v.trim()!==''));
+}
+
+// Convierte filas de CSV (con encabezados) al mismo formato que usa products.js
+function csvRowsToProducts(rows){
+  if(!rows.length) return [];
+  const headers=rows[0].map(h=>h.trim().toLowerCase());
+  const idx=name=>headers.indexOf(name);
+  const out=[];
+  for(let r=1;r<rows.length;r++){
+    const row=rows[r];
+    const get=name=>{ const i=idx(name); return i===-1?'':(row[i]||'').trim(); };
+    const nombre=get('nombre'), precio=parseFloat(get('precio'));
+    if(!nombre||isNaN(precio)){ console.warn('Fila de Sheet ignorada (falta nombre o precio):',row); continue; }
+    const oldPriceRaw=get('precio_anterior');
+    const sizesRaw=get('tallas');
+    const coloresRaw=get('colores');
+    const stockRaw=get('stock');
+    const producto={
+      id: get('id') ? Number(get('id'))||r : r,
+      name: nombre,
+      cat: get('categoria'),
+      emoji: get('emoji') || '✨',
+      badge: get('etiqueta') || '',
+      price: precio,
+      sizes: sizesRaw ? sizesRaw.split(',').map(s=>s.trim()).filter(Boolean) : ['Único'],
+      desc: get('descripcion'),
+      // Si la columna "stock" viene vacía se asume que no se está controlando
+      // inventario para ese producto y se trata como disponible (null = sin límite).
+      stock: stockRaw!=='' ? (parseInt(stockRaw,10)||0) : null,
+    };
+    // Foto simple (sin variantes de color) — columna "imagen" del Sheet.
+    // Para productos con variantes reales de color, usa la columna "colores" en su lugar.
+    const imagenRaw=get('imagen');
+    if(imagenRaw) producto.photo=imagenRaw;
+    if(oldPriceRaw && !isNaN(parseFloat(oldPriceRaw))) producto.oldPrice=parseFloat(oldPriceRaw);
+    if(coloresRaw){
+      producto.colors=coloresRaw.split(';').map(c=>c.trim()).filter(Boolean).map(chunk=>{
+        // split(':') limitado a nombre/hex — el resto se reúne para no romper las URLs (que traen "://")
+        const parts=chunk.split(':');
+        const name=(parts[0]||'').trim();
+        const hex=(parts[1]||'#cccccc').trim();
+        const photosRaw=parts.slice(2).join(':');
+        return {
+          name,
+          hex,
+          photos: photosRaw ? photosRaw.split('|').map(p=>p.trim()).filter(Boolean) : [],
+        };
+      });
+    }
+    out.push(producto);
+  }
+  return out;
+}
+
+// Intenta cargar el catálogo desde el Sheet publicado; si falla, usa products.js
+async function initProducts(){
+  if(SHEET_CSV_URL && SHEET_CSV_URL.trim()){
+    try{
+      const res=await fetch(SHEET_CSV_URL, {cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const text=await res.text();
+      const parsed=csvRowsToProducts(parseCSV(text));
+      if(parsed.length) products=parsed;
+      else console.warn('El Google Sheet no tiene productos válidos, usando products.js');
+    }catch(e){
+      console.warn('No se pudo cargar el Google Sheet, usando products.js:', e);
+    }
+  }
+  updateCart(); // refresca el total del carrito con el MONEDA correcto desde el primer render (el HTML estático trae un placeholder)
+  renderProds(products);
+}
+
+/* ══ INIT ══ */
+initProducts();
+</script>
+</body>
+</html>

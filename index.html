@@ -396,6 +396,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="view" id="view-nosotros">
   <div class="about-hero">
     <h1 id="nosotros-titulo">Sobre Nosotros</h1>
+    
     <p id="nosotros-subtitulo">Donde la Belleza y la Oscuridad Convergen</p>
   </div>
   <div class="about-body">
@@ -404,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="about-text">
         <p class="tag" id="nosotros-b1-tag">Nuestra Historia</p>
         <h2 id="nosotros-b1-h2">El Inicio de un Sueño</h2>
-        <p id="nosotros-b1-p1">Lilith de Chamberí nació de la pasión por abrazar lo alternativo y reinterpretar la estética oscura como una forma pura de expresión artística. Surgió al notar la falta de piezas auténticas que conectaran de verdad con un estilo diferente y con la propia individualidad.</p>
+        <p id="nosotros-b1-p1">Lilith de Chamberí nació de la pasión por abrazar lo alternativo y reinterpretar la estética oscura como I think Yeah. first one is the one that was used in the first one. una forma pura de expresión artística. Surgió al notar la falta de piezas auténticas que conectaran de verdad con un estilo diferente y con la propia individualidad.</p>
         <p id="nosotros-b1-p2">Creé este proyecto como un refugio creativo e inspirador, ofreciendo joyería, accesorios y maquillaje diseñados para quienes encuentran en el arte oscuro su forma de brillar con actitud.</p>
       </div>
     </div>
@@ -641,7 +642,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <div class="toast" id="toast"></div>
 
-<script src="products.js"></script>
 <script>
 /* ══ CONFIG ══ */
 const WA_NUM = '50492539242';
@@ -663,7 +663,7 @@ const PRODUCTS_PER_PAGE = 12;
 //    "Cualquiera con el enlace puede ver"):
 //    https://docs.google.com/spreadsheets/d/TU_ID_DE_HOJA/export?format=csv&gid=0
 // Si lo dejas vacío, o si el Sheet no carga, se usan los productos de muestra de products.js.
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1Lp1XrDh7E5De6as838QYhLFyOS8UPtFZWXsC6uoOVwg/export?format=csv&gid=0';
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRCpPc_4YgX1h_5P87Y4d9nOJ7_VVs43pmIr0aMSUm9-wJXjkm6yrfFq7-Mh2BKYhb-iVZBK5PI0pOr/pub?output=csv&gid=523999330';
 
 /* ══ STATE ══ */
 let cart=[], selProd=null, selSize=null, catFilter='todos', srchTerm='', filteredProducts=[], currentPage=1;
@@ -1156,19 +1156,46 @@ function csvRowsToProducts(rows){
   return out;
 }
 
+// Carga dinámica de fallback `products.js` si el Sheet no responde o no contiene productos válidos.
+function loadFallbackProductsJs(){
+  return new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='products.js';
+    s.async=true;
+    s.onload=()=>resolve();
+    s.onerror=(e)=>reject(e);
+    document.head.appendChild(s);
+  });
+}
+
 async function initProducts(){
+  let sheetLoaded=false;
   if(SHEET_CSV_URL && SHEET_CSV_URL.trim()){
     try{
       const res=await fetch(SHEET_CSV_URL, {cache:'no-store'});
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      const text=await res.text();
-      const parsed=csvRowsToProducts(parseCSV(text));
-      if(parsed.length) products=parsed;
-      else console.warn('El Google Sheet no tiene productos válidos, usando products.js');
+      if(res.ok){
+        const text=await res.text();
+        const parsed=csvRowsToProducts(parseCSV(text));
+        if(parsed.length){ products=parsed; sheetLoaded=true; }
+        else console.warn('El Google Sheet no tiene productos válidos, intentando fallback a products.js');
+      } else {
+        console.warn('No se pudo obtener el CSV del Sheet, HTTP', res.status);
+      }
     }catch(e){
-      console.warn('No se pudo cargar el Google Sheet, usando products.js:', e);
+      console.warn('No se pudo cargar el Google Sheet:', e);
     }
   }
+
+  if(!sheetLoaded){
+    try{
+      await loadFallbackProductsJs();
+      console.warn('products.js cargado como fallback');
+    }catch(e){
+      console.error('No se pudo cargar products.js como fallback', e);
+      products = products || [];
+    }
+  }
+
   updateCart();
   applyFilters();
 }

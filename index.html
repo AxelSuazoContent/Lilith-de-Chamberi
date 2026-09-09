@@ -131,6 +131,8 @@ nav{background:var(--dark);border-bottom:1px solid rgba(233,69,96,.35);box-shado
 .card-price .old{font-size:.74rem;color:var(--blush);text-decoration:line-through;margin-left:.3rem;font-weight:400;}
 .add-btn{background:var(--dark);color:#fff;border:none;padding:.45rem .95rem;border-radius:2px;font-size:.73rem;font-weight:500;cursor:pointer;letter-spacing:.05em;transition:background .15s;font-family:var(--font-ui);}
 .add-btn:hover{background:var(--mag);}
+.look-btn{background:transparent;color:var(--dark);border:1px solid var(--border);padding:.45rem .95rem;border-radius:2px;font-size:.73rem;font-weight:500;cursor:pointer;letter-spacing:.05em;transition:all .15s;font-family:var(--font-ui);}
+.look-btn:hover{background:var(--papery);border-color:var(--mag);color:var(--mag);}
 .empty-state{text-align:center;padding:5rem 2rem;color:var(--muted);}
 .empty-state .eicon{font-size:3rem;margin-bottom:1rem;}
 .pagination{display:flex;justify-content:center;align-items:center;gap:.35rem;margin-top:2.5rem;flex-wrap:wrap;}
@@ -170,7 +172,7 @@ nav{background:var(--dark);border-bottom:1px solid rgba(233,69,96,.35);box-shado
 .cp-body{flex:1;overflow-y:auto;padding:.9rem 1.3rem;}
 .cp-empty{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:.85rem;}
 .ci{display:flex;gap:.8rem;padding:.8rem 0;border-bottom:1px solid var(--border);align-items:flex-start;}
-.ci-img{width:54px;height:54px;background:var(--papery);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
+.ci-img{width:54px;height:54px;background:var(--papery);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden;}
 .ci-info{flex:1;}
 .ci-name{font-weight:500;font-size:.85rem;color:var(--dark);}
 .ci-size{font-size:.7rem;color:var(--muted);margin-top:.1rem;}
@@ -377,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
       <div class="footer-col">
         <h4>Info</h4>
-        <p>Enviamos a toda Honduras jaja</p>
+        <p>Enviamos a toda Honduras</p>
         <p>Aceptamos todas las tarjetas</p>
         <p>Horario: L-V 9am-6pm</p>
         <p>Estilo único garantizado</p>
@@ -623,8 +625,17 @@ document.addEventListener('DOMContentLoaded', function(){
     <div class="cp-head"><h2>Mi carrito</h2><button class="cp-close" onclick="closeCart()">✕</button></div>
     <div class="cp-body" id="cp-body"></div>
     <div class="cp-foot">
+      <div class="shipping-row" id="shipping-row">
+        <p class="bar-label" style="display:block;margin:0 0 .5rem;">Tipo de envío:</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.9rem;">
+          <button type="button" class="pill" id="ship-tgu" onclick="pickShipping('tegucigalpa',80,this)">Tegucigalpa (L. 80)</button>
+          <button type="button" class="pill" id="ship-nac" onclick="pickShipping('nacional',95,this)">Resto de Honduras (L. 95)</button>
+        </div>
+      </div>
+      <div class="tot-row"><span>Subtotal</span><span id="cart-subtotal">L. 0.00</span></div>
+      <div class="tot-row" id="shipping-cost-row" style="display:none;"><span>Envío</span><span id="cart-shipping">L. 0.00</span></div>
       <div class="tot-row"><span>Total</span><span id="cart-total">L. 0.00</span></div>
-      <button class="wa-btn" onclick="sendWA()">📲 Pedir por WhatsApp</button>
+      <button class="wa-btn" onclick="openNameModal()">📲 Pedir por WhatsApp</button>
       <p class="cart-note">Te llevaremos a WhatsApp con tu pedido listo</p>
     </div>
   </div>
@@ -637,6 +648,18 @@ document.addEventListener('DOMContentLoaded', function(){
     <p>Selecciona tu talla</p>
     <div class="sz-grid" id="sz-grid"></div>
     <button class="sz-confirm" onclick="confirmAdd()">Agregar al carrito</button>
+  </div>
+</div>
+
+<div class="sz-modal" id="name-modal">
+  <div class="sz-bd" onclick="closeNameModal()"></div>
+  <div class="sz-box">
+    <h3>¿A nombre de quién?</h3>
+    <p>Así sabemos quién nos escribe</p>
+    <div class="form-field">
+      <input type="text" id="wa-name-input" placeholder="Tu nombre" maxlength="60" onkeydown="if(event.key==='Enter')confirmSendWA()">
+    </div>
+    <button class="sz-confirm" onclick="confirmSendWA()">Continuar a WhatsApp</button>
   </div>
 </div>
 
@@ -667,6 +690,7 @@ const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRCpPc_4Y
 
 /* ══ STATE ══ */
 let cart=[], selProd=null, selSize=null, catFilter='todos', srchTerm='', filteredProducts=[], currentPage=1;
+let selectedShipping=null;
 
 const categoryLabels = {
   gargantillas:'Gargantillas',
@@ -765,6 +789,7 @@ function renderProds(list){
           </span>
           <div class="card-actions">
             <button class="add-btn" onclick="event.stopPropagation();openPD(${p.id})">Ver</button>
+            <button class="look-btn" onclick="event.stopPropagation();openSpecialFromProduct(products.find(function(prod){return prod.id===${p.id};}))">Consultar</button>
           </div>
         </div>
       </div>
@@ -837,18 +862,43 @@ function addToCart(prod,size){
 }
 
 /* ══ CART ══ */
+function cartItemPhoto(i){
+  if(i.colors&&i.colors.length){
+    const c=(i.color&&i.colors.find(c=>c.name===i.color))||i.colors[0];
+    if(c&&c.photos&&c.photos[0]) return c.photos[0];
+  }
+  return i.photo || null;
+}
 function updateCart(){
-  const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const shippingCost=selectedShipping?selectedShipping.cost:0;
+  const tot=subtotal+shippingCost;
   const cnt=cart.reduce((s,i)=>s+i.qty,0);
   document.getElementById('cart-count').textContent=cnt;
+  document.getElementById('cart-subtotal').textContent=MONEDA+' '+subtotal.toLocaleString('es-HN',{minimumFractionDigits:2});
+  const shipRow=document.getElementById('shipping-cost-row');
+  if(selectedShipping){
+    shipRow.style.display='flex';
+    document.getElementById('cart-shipping').textContent=MONEDA+' '+shippingCost.toLocaleString('es-HN',{minimumFractionDigits:2});
+  } else {
+    shipRow.style.display='none';
+  }
   document.getElementById('cart-total').textContent=MONEDA+' '+tot.toLocaleString('es-HN',{minimumFractionDigits:2});
+}
+function pickShipping(type,cost,btn){
+  selectedShipping={type,cost};
+  document.querySelectorAll('#shipping-row .pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  updateCart();
 }
 function renderCart(){
   const b=document.getElementById('cp-body');
   if(!cart.length){b.innerHTML='<div class="cp-empty">🛒<br><br>Tu carrito está vacío</div>';return;}
-  b.innerHTML=cart.map(i=>`
+  b.innerHTML=cart.map(i=>{
+    const photo=cartItemPhoto(i);
+    return `
     <div class="ci">
-      <div class="ci-img">${i.emoji||'📦'}</div>
+      <div class="ci-img">${photo?`<img src="${photo}" alt="${i.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${i.emoji||'📦'}'">`:(i.emoji||'📦')}</div>
       <div class="ci-info">
         <p class="ci-name">${i.name}</p>
         <p class="ci-size">${i.color?'Color: '+i.color+' · ':''}Talla ${i.size}</p>
@@ -861,7 +911,8 @@ function renderCart(){
       </div>
       <button class="ci-rm" onclick="rmItem(${i.id},'${i.size}')">✕</button>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 function rmItem(id,sz){cart=cart.filter(i=>!(i.id===id&&i.size===sz));updateCart();renderCart();}
 function chQty(id,sz,d){
@@ -870,13 +921,37 @@ function chQty(id,sz,d){
 }
 function openCart(){renderCart();document.getElementById('cart-overlay').style.display='block';}
 function closeCart(){document.getElementById('cart-overlay').style.display='none';}
-function sendWA(){
+function openNameModal(){
   if(!cart.length){showToast('Tu carrito está vacío');return;}
-  const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  let msg='Hola, quiero hacer un pedido de Lilith de Chamberi:\n\n';
-  cart.forEach(i=>{msg+=`${i.name}${i.color?' ('+i.color+')':''} — Talla ${i.size} x${i.qty} = ${MONEDA} ${(i.price*i.qty).toLocaleString('es-HN')}\n`;});
-  msg+=`\n*Total: ${MONEDA} ${tot.toLocaleString('es-HN',{minimumFractionDigits:2})}*\n\n¿Pueden confirmar disponibilidad? Gracias`;
+  if(!selectedShipping){showToast('Selecciona el tipo de envío primero');return;}
+  const input=document.getElementById('wa-name-input');
+  input.value='';
+  document.getElementById('name-modal').classList.add('open');
+  setTimeout(()=>input.focus(),50);
+}
+function closeNameModal(){document.getElementById('name-modal').classList.remove('open');}
+function confirmSendWA(){
+  const name=document.getElementById('wa-name-input').value.trim();
+  if(!name){showToast('Escribe tu nombre para continuar');return;}
+  closeNameModal();
+  sendWA(name);
+}
+function sendWA(name){
+  if(!cart.length){showToast('Tu carrito está vacío');return;}
+  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const shippingCost=selectedShipping?selectedShipping.cost:0;
+  const tot=subtotal+shippingCost;
+  let msg='¡Hola! 🖤 Quiero hacer un pedido de *Lilith de Chamberi*:\n\n';
+  if(name) msg+=`👤 Nombre: ${name}\n\n`;
+  cart.forEach(i=>{msg+=`🛍️ ${i.name}${i.color?' ('+i.color+')':''} — Talla ${i.size} x${i.qty} = ${MONEDA} ${(i.price*i.qty).toLocaleString('es-HN')}\n`;});
+  msg+=`\nSubtotal: ${MONEDA} ${subtotal.toLocaleString('es-HN',{minimumFractionDigits:2})}\n`;
+  if(selectedShipping){
+    const shipLabel=selectedShipping.type==='tegucigalpa'?'Envío Tegucigalpa':'Envío Nacional';
+    msg+=`🚚 ${shipLabel}: ${MONEDA} ${shippingCost.toLocaleString('es-HN',{minimumFractionDigits:2})}\n`;
+  }
+  msg+=`\n*Total: ${MONEDA} ${tot.toLocaleString('es-HN',{minimumFractionDigits:2})}*\n\n¿Pueden confirmar disponibilidad? ¡Gracias! 🖤`;
   window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
+  closeCart();
 }
 
 /* ══ PEDIDO PERSONALIZADO ══ */

@@ -5,7 +5,7 @@
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lilith be Chamberi — Elegancia Oscura</title> <!-- #EDITAR — Título que aparece en la pestaña del navegador -->
+<title>Lilith de Chamberi — Elegancia Oscura</title> <!-- #EDITAR — Título que aparece en la pestaña del navegador -->
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Pirata+One&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Lilith be Chamberi — Todos los derechos reservados</p>
+      <p>© 2026 Lilith de Chamberi — Todos los derechos reservados</p>
       <div class="socials">
         <a href="https://www.instagram.com/lilith_de_chamberi/" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
   <footer class="site-footer">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <p>© 2026 Lilith be Chamberi</p>
+      <p>© 2026 Lilith de Chamberi</p>
       <div class="socials">
         <a href="https://www.instagram.com/lilith_de_chamberi/" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
   <footer class="site-footer">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <p>© 2026 Lilith be Chamberi</p>
+      <p>© 2026 Lilith de Chamberi</p>
       <div class="socials">
         <a href="https://www.instagram.com/lilith_de_chamberi/" target="_blank" rel="noopener noreferrer">Instagram</a>
         <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
   <footer class="site-footer">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <p>© 2026 Lilith be Chamberi</p>
+      <p>© 2026 Lilith de Chamberi</p>
       <div class="socials">
         <a href="https://wa.me/50492539242" target="_blank" rel="noopener noreferrer">WhatsApp</a>
       </div>
@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
   <footer class="site-footer">
     <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <p>© 2026 Lilith be Chamberi</p>
+      <p>© 2026 Lilith de Chamberi</p>
     </div>
   </footer>
 </div>
@@ -873,7 +873,7 @@ function closeCart(){document.getElementById('cart-overlay').style.display='none
 function sendWA(){
   if(!cart.length){showToast('Tu carrito está vacío');return;}
   const tot=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  let msg='Hola, quiero hacer un pedido de Lilith be Chamberi:\n\n';
+  let msg='Hola, quiero hacer un pedido de Lilith de Chamberi:\n\n';
   cart.forEach(i=>{msg+=`${i.name}${i.color?' ('+i.color+')':''} — Talla ${i.size} x${i.qty} = ${MONEDA} ${(i.price*i.qty).toLocaleString('es-HN')}\n`;});
   msg+=`\n*Total: ${MONEDA} ${tot.toLocaleString('es-HN',{minimumFractionDigits:2})}*\n\n¿Pueden confirmar disponibilidad? Gracias`;
   window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
@@ -911,7 +911,7 @@ function sendSpecialOrder(){
     return;
   }
 
-  let msg='Hola, quiero un pedido especial en Lilith be Chamberi:\n\n';
+  let msg='Hola, quiero un pedido especial en Lilith de Chamberi:\n\n';
   msg+=`👤 Nombre: ${name}\n`;
   msg+=`📞 Teléfono: ${phone}\n`;
   msg+=`🏷️ Tipo: ${category}\n`;
@@ -1077,7 +1077,7 @@ function pdAddToCart(){
 
 function pdDirectWA(){
   const colorLabel=pdColor?pdColor.name:'';
-  let msg='Hola, me interesa este producto de Lilith be Chamberi:\n\n';
+  let msg='Hola, me interesa este producto de Lilith de Chamberi:\n\n';
   msg+=`*${pdProd.name}*\n`;
   if(colorLabel)msg+=`Color: ${colorLabel}\n`;
   msg+=`Precio: ${MONEDA} ${pdProd.price.toLocaleString('es-HN')}\n\n¿Está disponible? ¿Cuáles tallas tienen?`;

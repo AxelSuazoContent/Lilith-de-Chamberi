@@ -1186,6 +1186,23 @@ function parseCSV(text){
   return rows.filter(r=>r.some(v=>v.trim()!==''));
 }
 
+// El campo "imagen" (y "colores") de la hoja a veces no trae una URL directa, sino el
+// código de inserción HTML que sitios como imgbb.com entregan al copiar/pegar una imagen
+// (algo como: <a href="..."><img src="https://i.ibb.co/xxx.jpg"></a><br/><a>...</a>).
+// Esta función detecta ese caso y extrae la URL real de cada <img src="...">; si no
+// encuentra HTML, asume que ya son URLs simples separadas por coma o "|".
+function extractImageUrls(raw){
+  if(!raw) return [];
+  const trimmed=raw.trim();
+  if(!trimmed) return [];
+  const urls=[];
+  const imgTagRe=/<img[^>]+src=["']([^"']+)["']/gi;
+  let m;
+  while((m=imgTagRe.exec(trimmed))){ urls.push(m[1]); }
+  if(urls.length) return urls;
+  return trimmed.split(/[|,]/).map(u=>u.trim()).filter(u=>/^https?:\/\//i.test(u));
+}
+
 function csvRowsToProducts(rows){
   if(!rows.length) return [];
   const headers=rows[0].map(h=>h.trim().toLowerCase());
@@ -1212,7 +1229,8 @@ function csvRowsToProducts(rows){
       stock: stockRaw!=='' ? (parseInt(stockRaw,10)||0) : null,
     };
     const imagenRaw=get('imagen');
-    if(imagenRaw) producto.photo=imagenRaw;
+    const productPhotos=extractImageUrls(imagenRaw);
+    if(productPhotos.length) producto.photo=productPhotos[0];
     if(oldPriceRaw && !isNaN(parseFloat(oldPriceRaw))) producto.oldPrice=parseFloat(oldPriceRaw);
     if(coloresRaw){
       producto.colors=coloresRaw.split(';').map(c=>c.trim()).filter(Boolean).map(chunk=>{
@@ -1220,11 +1238,10 @@ function csvRowsToProducts(rows){
         const name=(parts[0]||'').trim();
         const hex=(parts[1]||'#cccccc').trim();
         const photosRaw=parts.slice(2).join(':');
-        return {
-          name,
-          hex,
-          photos: photosRaw ? photosRaw.split('|').map(p=>p.trim()).filter(Boolean) : [],
-        };
+        // Si el color no trae sus propias fotos, se usan las de la columna "imagen"
+        // del producto para que la ficha nunca se quede sin imagen por esto.
+        const photos = photosRaw ? extractImageUrls(photosRaw) : productPhotos;
+        return { name, hex, photos };
       });
     }
     out.push(producto);

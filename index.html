@@ -705,6 +705,79 @@ const categoryLabels = {
 };
 let selectedBudget=null;
 
+/* ══ NORMALIZACIÓN DE CATEGORÍAS Y COLORES ══
+   El cliente puede escribir la categoría o el color en el Google Sheet de mil formas
+   distintas (mayúsculas, minúsculas, singular, plural, con o sin acentos, en inglés...).
+   Todo esto se traduce aquí a las categorías/colores reales del sitio, para que nunca
+   se rompa el filtro ni la ficha del producto solo por cómo se escribió una palabra. */
+function stripAccents(s){ return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+function normalizeText(s){ return stripAccents(s).toLowerCase().trim().replace(/\s+/g,' '); }
+
+// Cada categoría real del sitio acepta cualquiera de estas variantes (ya normalizadas:
+// sin acentos, en minúscula). Cubre singular/plural, sinónimos comunes y su forma en inglés.
+const CATEGORY_ALIASES = {
+  gargantillas:['gargantilla','gargantillas'],
+  chokers:['choker','chokers'],
+  anillos:['anillo','anillos','ring','rings','sortija','sortijas'],
+  aretes:['arete','aretes','aro','aros','pendiente','pendientes','earring','earrings'],
+  maquillaje:['maquillaje','maquillajes','make up','makeup','cosmetico','cosmeticos'],
+  collares:['collar','collares','necklace','necklaces'],
+  pulseras:['pulsera','pulseras','brazalete','brazaletes','bracelet','bracelets'],
+  bolsos:['bolso','bolsos','mochila','mochilas','bolsos/mochilas','bolsos mochilas','bag','bags','backpack','backpacks','cartera','carteras']
+};
+// Convierte lo que escribió el cliente en la hoja (p.ej. "Arete", "ARETES", "aretés",
+// "Bolsos/Mochilas") en la categoría real del sitio (slug + etiqueta bonita para mostrar).
+// Si no reconoce la palabra, no rompe nada: deja pasar un slug propio y una etiqueta
+// con la primera letra en mayúscula, para que el producto se siga viendo en "Todos".
+function singularPlural(w){ return w.endsWith('s') ? w.slice(0,-1) : w+'s'; }
+function normalizeCategory(raw){
+  const norm=normalizeText(raw).replace(/[^a-z0-9/ ]/g,'');
+  if(!norm) return {slug:'', label:''};
+  // 1) coincidencia exacta de la frase completa (cubre "Bolsos/Mochilas" tal cual)
+  for(const slug in CATEGORY_ALIASES){
+    if(CATEGORY_ALIASES[slug].includes(norm)||CATEGORY_ALIASES[slug].includes(singularPlural(norm))) return {slug,label:categoryLabels[slug]};
+  }
+  // 2) coincidencia por palabra completa (cubre "Aretes largos", "Accesorio: Anillo"),
+  //    NUNCA por subcadena cruda — evita falsos positivos como "raros" ⊃ "aro".
+  const words=norm.split(/[\s/]+/).filter(Boolean);
+  for(const w of words){
+    for(const slug in CATEGORY_ALIASES){
+      if(CATEGORY_ALIASES[slug].includes(w)||CATEGORY_ALIASES[slug].includes(singularPlural(w))) return {slug,label:categoryLabels[slug]};
+    }
+  }
+  const fallbackLabel=String(raw||'').trim().replace(/\s+/g,' ');
+  return {slug:norm.replace(/\s+/g,'-').replace(/\//g,'-'), label: fallbackLabel ? fallbackLabel.charAt(0).toUpperCase()+fallbackLabel.slice(1).toLowerCase() : ''};
+}
+
+// Nombres de color en español/inglés que el cliente puede escribir en vez de un código
+// hexadecimal. Si escribe un hex (con o sin "#", 3 o 6 dígitos) siempre tiene prioridad.
+const COLOR_NAME_MAP = {
+  negro:'#111111', black:'#111111',
+  blanco:'#ffffff', white:'#ffffff',
+  rojo:'#c1121f', red:'#c1121f',
+  rosa:'#e75480', rosado:'#e75480', pink:'#e75480', fucsia:'#ff2fb0',
+  morado:'#6a0dad', violeta:'#6a0dad', purpura:'#6a0dad', purple:'#6a0dad', lila:'#b19cd9', lavanda:'#b19cd9',
+  azul:'#1d4ed8', blue:'#1d4ed8', celeste:'#38bdf8', turquesa:'#30d5c8',
+  verde:'#228b22', green:'#228b22', esmeralda:'#046307', olivo:'#556b2f', militar:'#556b2f',
+  amarillo:'#f4c430', yellow:'#f4c430', dorado:'#d4af37', oro:'#d4af37', gold:'#d4af37',
+  plateado:'#c0c0c0', plata:'#c0c0c0', silver:'#c0c0c0',
+  gris:'#808080', gray:'#808080', grey:'#808080',
+  cafe:'#5c4033', marron:'#5c4033', chocolate:'#5c4033', brown:'#5c4033',
+  beige:'#e8dcc8', nude:'#e3bc9a', bronce:'#cd7f32', cobre:'#b87333',
+  vino:'#722f37', borgona:'#722f37', naranja:'#ff7f11', orange:'#ff7f11',
+  transparente:'#e0e0e0', multicolor:'#e94560'
+};
+function normalizeColorHex(raw){
+  const v=String(raw||'').trim();
+  if(!v) return '#cccccc';
+  const withHash = v.startsWith('#') ? v : '#'+v;
+  if(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(withHash)) return withHash.toLowerCase();
+  const key=normalizeText(v).replace(/[^a-z\s]/g,'').trim();
+  if(COLOR_NAME_MAP[key]) return COLOR_NAME_MAP[key];
+  if(/^[a-zA-Z]+$/.test(v)) return v.toLowerCase(); // deja pasar palabras clave CSS válidas (ej. "crimson")
+  return '#cccccc';
+}
+
 /* ══ NAVIGATION ══ */
 function showView(name){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -778,7 +851,7 @@ function renderProds(list){
         ${agotado?`<span class="badge sale">Agotado</span>`:(p.badge?`<span class="badge${p.oldPrice?' sale':''}">${p.badge}</span>`:'')}
       </div>
       <div class="card-body">
-        <p class="card-cat">${categoryLabels[p.cat]||p.cat}</p>
+        <p class="card-cat">${p.catLabel||categoryLabels[p.cat]||p.cat}</p>
         <p class="card-name">${p.name}</p>
         ${swatches?`<div style="margin:.3rem 0 .4rem;">${swatches}<span style="font-size:.68rem;color:var(--muted);vertical-align:middle;margin-left:2px;">${p.colors.length} color${p.colors.length>1?'es':''}</span></div>`:''}
         ${tieneTallas?`<p class="card-sizes">Tallas: ${p.sizes.join(' · ')}</p>`:''}
@@ -966,7 +1039,7 @@ function openSpecialFromProduct(prod){
   showView('look');
   if(prod){
     const sel=document.getElementById('sp-category');
-    const label=(categoryLabels[prod.cat]||prod.cat||'').toLowerCase();
+    const label=(prod.catLabel||categoryLabels[prod.cat]||prod.cat||'').toLowerCase();
     const opts=Array.from(sel.options).map(o=>o.value);
     const match=opts.find(o=>o.toLowerCase()===label)
       || opts.find(o=>label && (o.toLowerCase().includes(label)||label.includes(o.toLowerCase())));
@@ -1007,7 +1080,7 @@ function openPD(id){
   pdProd=products.find(p=>p.id===id);
   pdColor=pdProd.colors&&pdProd.colors.length ? pdProd.colors[0] : null;
   pdSize=null;
-  document.getElementById('pd-cat').textContent=categoryLabels[pdProd.cat]||pdProd.cat;
+  document.getElementById('pd-cat').textContent=pdProd.catLabel||categoryLabels[pdProd.cat]||pdProd.cat;
   document.getElementById('pd-name').textContent=pdProd.name;
   document.getElementById('pd-desc').textContent=pdProd.desc||'';
   let priceHTML=MONEDA+' '+pdProd.price.toLocaleString('es-HN');
@@ -1217,10 +1290,14 @@ function csvRowsToProducts(rows){
     const sizesRaw=get('tallas');
     const coloresRaw=get('colores');
     const stockRaw=get('stock');
+    // La categoría se normaliza para que no importe cómo la haya escrito el cliente
+    // en la hoja: mayúsculas/minúsculas, singular/plural, con o sin acentos, etc.
+    const catInfo=normalizeCategory(get('categoria'));
     const producto={
       id: get('id') ? Number(get('id'))||r : r,
       name: nombre,
-      cat: get('categoria'),
+      cat: catInfo.slug,
+      catLabel: catInfo.label,
       emoji: get('emoji') || '✨',
       badge: get('etiqueta') || '',
       price: precio,
@@ -1236,7 +1313,9 @@ function csvRowsToProducts(rows){
       producto.colors=coloresRaw.split(';').map(c=>c.trim()).filter(Boolean).map(chunk=>{
         const parts=chunk.split(':');
         const name=(parts[0]||'').trim();
-        const hex=(parts[1]||'#cccccc').trim();
+        // Acepta hex con o sin "#", 3 o 6 dígitos, o un nombre de color en español/inglés
+        // (ej. "Negro", "negro", "NEGRO", "black" son todos válidos, sin importar mayúsculas).
+        const hex=normalizeColorHex(parts[1]);
         const photosRaw=parts.slice(2).join(':');
         // Si el color no trae sus propias fotos, se usan las de la columna "imagen"
         // del producto para que la ficha nunca se quede sin imagen por esto.

@@ -81,10 +81,13 @@ Ya te dejamos un archivo listo para esto: **sheets-template/productos.csv**. Ya 
 3. Elige "Reemplazar hoja de cálculo" al importar
 4. Reemplaza las filas de ejemplo con tus productos reales (mantén los encabezados de la primera fila)
 
-Columnas del archivo: `id, nombre, categoria, publico, precio, precio_anterior, etiqueta, tallas, descripcion, emoji, imagen, colores`
+Columnas del archivo: `id, nombre, categoria, precio, precio_anterior, etiqueta, tallas, stock, descripcion, emoji, imagen, colores`
 
-- **categoria**: debe ser una de estas para tu negocio: `maquillaje, skincare, unas, perfumes`
-- **publico** (opcional): hombre, mujer, ninos o parejas — déjalo vacío si no aplica a tu negocio
+- **categoria**: las categorías del sitio son: `gargantillas, chokers, anillos, aretes, maquillaje, collares, pulseras, bolsos`.
+  No importa cómo la escribas — mayúsculas, minúsculas, singular o plural, con o sin acentos, e incluso en inglés
+  funcionan igual (ej. "Aretes", "aretes", "ARETE", "Arete", "aretés", "Pendientes" o "earring" se reconocen todos
+  como la categoría **Aretes**). Si escribes una categoría que no está en esta lista, el producto igual aparece
+  en "Todos", solo que no tendrá un botón de filtro dedicado.
 - **precio_anterior** (opcional): solo si el producto está en oferta
 - **etiqueta** (opcional): Nuevo, Oferta o Exclusivo
 - **tallas** (opcional): separadas por coma, ej: `S,M,L,XL` — si tu negocio no maneja tallas (tecnología, equipos, servicios, comida, etc.) déjalo como `Único` o vacío: el sitio no le mostrará ese paso al cliente
@@ -92,6 +95,9 @@ Columnas del archivo: `id, nombre, categoria, publico, precio, precio_anterior, 
 - **imagen** (opcional): enlace a la foto real del producto — úsalo si el producto NO tiene variantes de color
 - **colores** (opcional, variantes con fotos): formato `Nombre:código de color:foto1|foto2; Nombre2:código:foto3` — úsalo en vez de "imagen" solo si el producto sí viene en distintos colores
   - Ejemplo: `Negro:#000000:https://foto1.jpg|https://foto2.jpg; Blanco:#ffffff:https://foto3.jpg`
+  - El código de color acepta un hexadecimal (`#000000`, `000000` o `#000`, con o sin "#") o directamente un
+    nombre de color en español/inglés (`Negro`, `negro`, `NEGRO`, `black` funcionan igual). Lista completa de
+    nombres reconocidos y su código real: ver `guia/categorias-y-colores.pdf`.
 - Si dejas **id** vacío, se numera solo por fila
 
 ### Paso 2: Publica la hoja como CSV
